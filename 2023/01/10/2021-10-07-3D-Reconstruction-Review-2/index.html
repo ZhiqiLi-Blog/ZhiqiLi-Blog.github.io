@@ -1,0 +1,801 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Zhiqi Li">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="文献阅读Learning Efficient Illumination Multiplexing for Joint Capture of Reflectance and Shape一. 问题背景1.问题介绍 joint acquisition of unknown reflectance and shape efficient capture of both reflectance and sh">
+<meta property="og:type" content="article">
+<meta property="og:title" content="(2021-10-07)3D-Reconstruction Review(2)">
+<meta property="og:url" content="http://example.com/2023/01/10/2021-10-07-3D-Reconstruction-Review-2/index.html">
+<meta property="og:site_name" content="Zhiqi Li">
+<meta property="og:description" content="文献阅读Learning Efficient Illumination Multiplexing for Joint Capture of Reflectance and Shape一. 问题背景1.问题介绍 joint acquisition of unknown reflectance and shape efficient capture of both reflectance and sh">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/b025a49249d34ccdb3f2f8adb50782e2.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAbGl6aGlxaV9jcmVhdG9y,size_20,color_FFFFFF,t_70,g_se,x_16">
+<meta property="article:published_time" content="2023-01-10T03:06:49.000Z">
+<meta property="article:modified_time" content="2023-01-10T03:15:23.062Z">
+<meta property="article:author" content="Zhiqi Li">
+<meta property="article:tag" content="3D-reconstruction">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://img-blog.csdnimg.cn/b025a49249d34ccdb3f2f8adb50782e2.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAbGl6aGlxaV9jcmVhdG9y,size_20,color_FFFFFF,t_70,g_se,x_16">
+  
+  
+  
+  <title>(2021-10-07)3D-Reconstruction Review(2) - Zhiqi Li</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.4","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":"SnQVZ3g2ov3Rv5ttRLbPErAL-gzGzoHsz","app_key":"aXgIpZV6AvkghCBXYTJ1EwhV","server_url":"https://snqvz3g2.lc-cn-n1-shared.com","path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+  
+
+
+
+  
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 5.4.2"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Zhiqi Li</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>Home</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>Archives</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>Categories</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>Tags</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>About</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="(2021-10-07)3D-Reconstruction Review(2)"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-01-10 11:06" pubdate>
+          January 10, 2023 am
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          9.1k words
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          77 mins
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="leancloud-page-views-container" class="post-meta" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="leancloud-page-views"></span> views
+        </span>
+        
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">(2021-10-07)3D-Reconstruction Review(2)</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="文献阅读"><a href="#文献阅读" class="headerlink" title="文献阅读"></a>文献阅读</h1><h2 id="Learning-Efficient-Illumination-Multiplexing-for-Joint-Capture-of-Reflectance-and-Shape"><a href="#Learning-Efficient-Illumination-Multiplexing-for-Joint-Capture-of-Reflectance-and-Shape" class="headerlink" title="Learning Efficient Illumination Multiplexing for Joint Capture of Reflectance and Shape"></a>Learning Efficient Illumination Multiplexing for Joint Capture of Reflectance and Shape</h2><h3 id="一-问题背景"><a href="#一-问题背景" class="headerlink" title="一. 问题背景"></a>一. 问题背景</h3><h4 id="1-问题介绍"><a href="#1-问题介绍" class="headerlink" title="1.问题介绍"></a>1.问题介绍</h4><ul>
+<li>joint acquisition of unknown reflectance and shape</li>
+<li>efficient capture of both reflectance and shape is fundamentally challenging<br>(1)渲染方程的高维性以及与image-based measurement的紧密联系.所以需要 take as many measurements as possible来得到足够的信息<br>James T. Kajiya. 1986. The Rendering Equation (SIGGRAPH ’86). 143–150.<br>(2)实际应用中,the number of samples can be<br>strictly limited.而其解决方法是优化acquisition efficiency</li>
+</ul>
+<h4 id="2-相关工作"><a href="#2-相关工作" class="headerlink" title="2.相关工作"></a>2.相关工作</h4><h5 id="2-1-综述"><a href="#2-1-综述" class="headerlink" title="2.1 综述"></a>2.1 综述</h5><p>样品反射率和形状的重建可以分为两个种类,分类是基于入射光是否被控制.在相关工作中仅介绍被控制的情形.可参考下面的综述.</p>
+<ul>
+<li>Yue Dong. 2019. Deep appearance modeling: A survey. Visual Informatics (2019).</li>
+<li>Darya Guarnera, Giuseppe C. Guarnera, Abhijeet Ghosh, Cornelia Denk, and Mashhuda Glencross. 2016. BRDF Representation and Acquisition. Computer Graphics Forum 35, 2 (2016), 625–650</li>
+<li>Michael Weinmann and Reinhard Klein. 2015. Advances in Geometry and Reflectance Acquisition. In SIGGRAPH Asia Courses. Article 1, 71 pages.</li>
+<li>Tim Weyrich, Jason Lawrence, Hendrik P. A. Lensch, Szymon Rusinkiewicz, and Todd Zickler. 2009. Principles of Appearance Acquisition and Representation. Found.Trends. Comput. Graph. Vis. 4, 2 (2009), 75–191.<h5 id="2-2-Geometry-Reconstruction-with-the-Diffuse-Assumption"><a href="#2-2-Geometry-Reconstruction-with-the-Diffuse-Assumption" class="headerlink" title="2.2 Geometry Reconstruction with the Diffuse Assumption"></a>2.2 Geometry Reconstruction with the Diffuse Assumption</h5></li>
+<li>下面的方法是基于diffuse-dominant reflectance假设(它是多个view 下的不变量,用来在multi-view之间建立对应),但是对于被general SVBRDF表达的外观就不行了:<em>“</em> the reflectance that changes with the view is often treated as outliers, or physically modified via means like powder coating.<em>“</em><br>(1)Daniel Scharstein and Richard Szeliski. 2003. High-accuracy stereo depth maps using structured light. In CVPR.<br>高质量的几何重建可以基于active illumination方法,比如strutured lighting<br>(2)Johannes Lutz Schönberger, Enliang Zheng, Marc Pollefeys, and Jan-Michael Frahm.2016. Pixelwise View Selection for Unstructured Multi-View Stereo. In ECCV.<br>对于丰富表面纹理的样品,passive的方法,比如structure-from-motion也可以很好的恢复形状</li>
+<li>Robert J Woodham. 1980. Photometric method for determining surface orientation from multiple images. Optical engineering 19, 1 (1980), 191139.<br>另一条线是 photometric stereo.从不同光照条件下外观的变化,它估计法向场,而法向场可以合并到一个3D的表面上去.<br>这一种方法,最近的研究仍然局限于各向同性的镜面反射光,并需要 96 distant lighting conditions<br>Satoshi Ikehata. 2018. CNN-PS: CNN-based photometric stereo for general non-convex surfaces. In ECCV<h5 id="2-3-Spatially-Varying-Reflectance-Capture-on-a-Known-Shape"><a href="#2-3-Spatially-Varying-Reflectance-Capture-on-a-Known-Shape" class="headerlink" title="2.3  Spatially-Varying Reflectance Capture on a Known Shape"></a>2.3  Spatially-Varying Reflectance Capture on a Known Shape</h5></li>
+<li>对6D定义域的SVBRDF的直接采样,通过mechanically positioning a camera and a light source是及其费时的<br>Kristin J. Dana, Bram van Ginneken, Shree K. Nayar, and Jan J. Koenderink. 1999.<br>Reflectance and Texture of Real-world Surfaces. ACM Trans. Graph. 18, 1 (Jan. 1999),<br>1–34.<br>Jason Lawrence, Aner Ben-Artzi, Christopher DeCoro, Wojciech Matusik, Hanspeter<br>Pfister, Ravi Ramamoorthi, and Szymon Rusinkiewicz. 2006. Inverse Shade Trees<br>for Non-parametric Material Representation and Editing. ACM Trans. Graph. 25, 3<br>(July 2006), 735–745.<br>对于反射率数据的priors被引入减少消耗,包括基本材料的线性组合:<br>Hendrik P. A. Lensch, Jan Kautz, Michael Goesele, Wolfgang Heidrich, and Hans-Peter<br>Seidel. 2003. Image-based Reconstruction of Spatial Appearance and Geometric<br>Detail. ACM Trans. Graph. 22, 2 (April 2003), 234–257<br>Hongzhi Wu, Zhaotian Wang, and Kun Zhou. 2016. Simultaneous Localization and<br>Appearance Estimation with a Consumer RGB-D Camera. IEEE TVCG 22, 8 (Aug</li>
+</ul>
+<p>2016), 2012–2023.<br>以及反射率位于低维流形上:<br>Yue Dong, Jiaping Wang, Xin Tong, John Snyder, Yanxiang Lan, Moshe Ben-Ezra, and<br>Baining Guo. 2010. Manifold Bootstrapping for SVBRDF Capture. ACM Trans.<br>Graph. 29, 4, Article 98 (July 2010), 10 pages.<br>以及stochastic-texture-like的材料的假设<br>Miika Aittala, Tim Weyrich, and Jaakko Lehtinen. 2015. Two-shot SVBRDF Capture for<br>Stationary Materials. ACM Trans. Graph. 34, 4, Article 110 (July 2015), 13 pages.</p>
+<ul>
+<li>Illumination-multiplexing-based approaches可以有效的获取高质量的结果,大量的光宇被同时program<br>(1)Abhijeet Ghosh, Tongbo Chen, Pieter Peers, Cyrus A. Wilson, and Paul Debevec. 2009.<br>Estimating Specular Roughness and Anisotropy from Second Order Spherical Gradient Illumination. Computer Graphics Forum 28, 4 (2009), 1161–1170.<br>通过捕捉spherical harmonics lighting patterns下的照片,然后通过人工推导的反向查询表(which maps the observed radiance to BRDF parameters)来恢复反射率<br>(2)Guojun Chen, Yue Dong, Pieter Peers, Jiawan Zhang, and Xin Tong. 2014. Reflectance<br>Scanning: Estimating Shading Frame and BRDF with Generalized Linear Light<br>Sources. ACM Trans. Graph. 33, 4, Article 117 (July 2014), 11 pages.<br>Andrew Gardner, Chris Tchou, Tim Hawkins, and Paul Debevec. 2003. Linear light<br>source reflectometry. ACM Trans. Graph. 22, 3 (2003), 749–758.<br>线性光源在平面材料的样品上移动,并通过对应的外观变量对SVBRDF进行重建<br>(3)Miika Aittala, Tim Weyrich, and Jaakko Lehtinen. 2013. Practical SVBRDF Capture in<br>the Frequency Domain. ACM Trans. Graph. 32, 4, Article 110 (July 2013), 12 pages.<br>使用相机和近场的LCD板作为光源,基于频域分析,来获得各向同性的反射率</li>
+<li>Kaizhang Kang, Zimin Chen, Jiaping Wang, Kun Zhou, and Hongzhi Wu. 2018. Efficient<br>Reflectance Capture Using an Autoencoder. ACM Trans. Graph. 37, 4, Article 127<br>(July 2018), 10 pages.<br>就是上一篇阅读的文章.那一篇文章不能直接向这里推广的原因是 <strong>“</strong> the extra complexity of unknown geometry, and the complicated interplay between reflectance and shape in image measurements.<strong>“</strong><h5 id="2-4-Joint-Acquisition-of-Reflectance-and-Shape"><a href="#2-4-Joint-Acquisition-of-Reflectance-and-Shape" class="headerlink" title="2.4 Joint Acquisition of Reflectance and Shape"></a>2.4 Joint Acquisition of Reflectance and Shape</h5></li>
+<li>Borom Tunwattanapong, Graham Fyffe, Paul Graham, Jay Busch, Xueming Yu, Abhijeet<br>Ghosh, and Paul Debevec. 2013. Acquiring Reflectance and Shape from Continuous<br>Spherical Harmonic Illumination. ACM Trans. Graph. 32, 4, Article 109 (July 2013),<br>12 pages.<br>rotating LED arc去向样品上投射连续的SH pattern.它是基于distant lighting assumption的.per-pixel reflectance maps给每个view计算,然后将其作为shape reconstruction的输入.这个方法不能用于该方法的原因是:为了减少反射率重建的近场效应,需要每个像素精确的3D位置.</li>
+<li>Zhenglong Zhou, Zhe Wu, and Ping Tan. 2013. Multi-view photometric stereo with<br>spatially varying isotropic materials. In CVPR.<br>这篇文章是基于 isotropic reflectance assumption的,不能用于aisotropic的情形.利用多个view ,环状LED灯每次只开一个.先进行isotropic reflectance computation,然后去estimate the geometry.稀疏的灯可以防止per-pixel reflectance estimation</li>
+<li>Michael Holroyd, Jason Lawrence, and Todd Zickler. 2010. A Coaxial Optical Scanner<br>for Synchronous Acquisition of 3D Geometry and Surface Reflectance. ACM Trans.<br>Graph. 29, 4, Article 99 (July 2010), 12 pages.<br>通过投影仪-相机对以及phase-shift pattern,使用建立了一个gantry,来进行几何重建.但是需要对恢复的反射率比较强的prior,,这是由sparse sampling in the angular domain导致的假设.</li>
+<li>Rui Xia, Yue Dong, Pieter Peers, and Xin Tong. 2016. Recovering Shape and Spatiallyvarying Surface Reflectance Under Unknown Illumination. ACM Trans. Graph. 35,<br>6, Article 187 (Nov. 2016), 12 pages<br>利用未知光照的不连续性,从旋转物体的video sequence来恢复形状和各向同性的反射率.<br>而<br>Giljoo Nam, Joo Ho Lee, Diego Gutierrez, and Min H Kim. 2018. Practical SVBRDF<br>acquisition of 3D objects with unstructured flash photography. In SIGGRAPH Asia<br>Technical Papers. 267</li>
+</ul>
+<p><strong>“</strong> take hundreds of flash photographs from multiple views, to compute a 3D geometry and isotropic reflectance expressed as a linear combination of basis materials, via an involved alternating optimization. <strong>“</strong></p>
+<h5 id="2-5-Deep-Learning-Assisted-Modeling"><a href="#2-5-Deep-Learning-Assisted-Modeling" class="headerlink" title="2.5 Deep-Learning-Assisted Modeling"></a>2.5 Deep-Learning-Assisted Modeling</h5><ul>
+<li>对于将Deep neural  network使用到反射率重建中,可以参考下面的文章<br>(1)Valentin Deschaintre, Miika Aittala, Fredo Durand, George Drettakis, and Adrien<br>Bousseau. 2018. Single-image SVBRDF Capture with a Rendering-aware Deep<br>Network. ACM Trans. Graph. 37, 4, Article 128 (July 2018), 15 pages.<br>(2)Xiao Li, Yue Dong, Pieter Peers, and Xin Tong. 2017. Modeling Surface Appearance<br>from a Single Photograph Using Self-augmented Convolutional Neural Networks.<br>ACM Trans. Graph. 36, 4, Article 45 (July 2017), 11 pages.</li>
+<li>对于将Deep neural  network使用到形状重建中,可以参考下面的文章<br>(1)Alex Kendall, Hayk Martirosyan, Saumitro Dasgupta, Peter Henry, Ryan Kennedy,<br>Abraham Bachrach, and Adam Bry. 2017. End-To-End Learning of Geometry and<br>Context for Deep Stereo Regression. In ICCV.<br>(2)Yao Yao, Zixin Luo, Shiwei Li, Tian Fang, and Long Quan. 2018. MVSNet: Depth<br>Inference for Unstructured Multi-view Stereo. In ECCV.</li>
+<li>最近</li>
+</ul>
+<p>Shihao Wu, Hui Huang, Tiziano Portenier, Matan Sela, Daniel Cohen-Or, Ron Kimmel, and Matthias Zwicker. 2018. Specular-to-Diffuse Translation for Multi-View<br>Reconstruction. In ECCV.<br>….</p>
+<h4 id="3-ACQUISITION-SETUP"><a href="#3-ACQUISITION-SETUP" class="headerlink" title="3. ACQUISITION SETUP"></a>3. ACQUISITION SETUP</h4><p>见原文</p>
+<h4 id="4-Preliminareis"><a href="#4-Preliminareis" class="headerlink" title="4.Preliminareis"></a>4.Preliminareis</h4><p>在不失一般性的前提下,这篇文章对于上面的acquisition<br>setup做了independently controlled, near-field or distant light sources的假设.并且假设物品是不透明的,可以使用3D mesh进行建模,并且表面形状进行各向异性的SVBRDF建模.偏振过滤器不被使用.同时每个点反射率是单独构建的,没有空间连续性的假设</p>
+<p>关于下面几个公式的解释见上一篇文献阅读文章<br>$$<br>\begin{aligned}<br>B(I, \mathbf{p})=&amp; \int \frac{1}{\left|\mathbf{x}<em>{1}-\mathrm{x}</em>{\mathrm{p}}\right|^{2}} I(l) \Psi\left(\mathrm{x}<em>{1},-\omega</em>{\mathrm{i}}\right) f_{r}\left(\omega_{\mathrm{i}}^{\prime} ; \omega_{\mathbf{o}}^{\prime}, \mathbf{p}\right) \<br>&amp;\left(\omega_{\mathbf{i}} \cdot \mathbf{n}<em>{\mathbf{p}}\right)\left(-\omega</em>{\mathbf{i}} \cdot \mathbf{n}<em>{1}\right) d \mathbf{x}</em>{1}<br>\end{aligned}\<br>L_{0}\left(p, \omega_{0}\right)=L_{e}\left(p, \omega_{0}\right)+\int_{\xi^{2}} f_{r}\left(p, w_{i} \rightarrow w_{0}\right) L_{i}\left(p, \omega_{i}\right) \cos \theta d \omega_{i}\<br>B(I, \mathbf{p})=\sum_{l} I(l) m(l ; \mathbf{p})\<br>m(j ; \mathbf{p})=B({I(l=j)=1, I(l \neq j)=0}, \mathbf{p})<br>$$<br>更进一步的将,lumitexel m可以表示成diffuse lumitexel $m_d$和specular lumitexel $m_s$的和.$m(l)=m_d(l)+m_s(l)$<br>(个人理解,这里应该是将渲染方程中的$f_r$给拆了)</p>
+<h4 id="5-Overview"><a href="#5-Overview" class="headerlink" title="5.Overview"></a>5.Overview</h4><p>本文通过小样本的,同样的lighting pattern下的multi-view photographs,利用mixed-domain neural network取捕捉形状以及反射率.对于每个view中的有效的pixel location,通过投射不同的光照模式,network 将对应点p上面的lumitexel 给encode成少量的measure values.然后将measurements给decode 成diffuse/specular lumitexels,法向向量以及估计的位置.根据不同的view下的这些信息,可以计算出在多角度下的详细的3D mesh.当shape确定了以后,在每一个表面的点上可以将一个4D BRDF以及局部坐标系与lumitexel匹配,然后产生代表了最后的6D SVBRDF的texture map<br><img src="https://img-blog.csdnimg.cn/b025a49249d34ccdb3f2f8adb50782e2.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAbGl6aGlxaV9jcmVhdG9y,size_20,color_FFFFFF,t_70,g_se,x_16" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></p>
+<h5 id="5-1-Design-Considerations"><a href="#5-1-Design-Considerations" class="headerlink" title="5.1 Design Considerations"></a>5.1 Design Considerations</h5><ul>
+<li>不会直接使用end-toend(<strong>?</strong>)为最终的几何学习估计的位置p.原因是因为虽然lumitexel中包含了与位置相关的信息(即$\frac{-\omega_i\cdot n_l}{|||x_1-x_p||^2}$),但是这个信息对p的变化太敏感了,很难得到高精度的3D位置信息,但是这个p又需要足够的准确用来在decode diffuse lumitexel for estimating $\rho_d$时eliminate near-field effect.</li>
+<li>不像之前的文章,是利用得到的reflectance来得到normal,而是直接得到这个信息.这是因为在近场条件下,反射率和几何是highly coupled(<strong>“</strong> the reflectance reconstruction requires a position at the current pixel, while the shape reconstruction takes normals as input <strong>“</strong>).本文中利用深度网络来拆解这个mutual dependency.</li>
+<li>与上一篇阅读的文章类似,选择学习lumitexs,而不是直接得到BRDF参数(<strong>“</strong> due to the simple spatially invariant, linear relationship among the lighting pattern, the lumitexel and the measurements <strong>“</strong>).</li>
+<li>现在的主要工作是将multi-view stereo的信息聚合起来建立多个view下的reliable的对应,这是几何重建下重要的异步.但是这个netwok将每一个点的lumitexel当做输入,原因是这使得network简单,并且阻值了**”** the possible combinatorial explosion in synthesizing training data of varied reflectance and shape <strong>“</strong>.并且利用state-of-the-art existing work for spatial aggregation 而不是加重网络的负担.</li>
+</ul>
+<h4 id="6-NETWORK"><a href="#6-NETWORK" class="headerlink" title="6.NETWORK"></a>6.NETWORK</h4>
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/3D-reconstruction/">#3D-reconstruction</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>(2021-10-07)3D-Reconstruction Review(2)</div>
+      <div>http://example.com/2023/01/10/2021-10-07-3D-Reconstruction-Review-2/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>Zhiqi Li</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>January 10, 2023</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>Licensed under</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2023/01/10/2021-10-09-3D-Reconstruction-Review-3/" title="(2021-10-09)3D-Reconstruction Review(3)">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">(2021-10-09)3D-Reconstruction Review(3)</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/01/10/2021-10-05-Games-102-Geometry-Review/" title="(2021-10-05)Games 102 Geometry-Review">
+                        <span class="hidden-mobile">(2021-10-05)Games 102 Geometry-Review</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://lib.baomitu.com/valine/1.5.1/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"SnQVZ3g2ov3Rv5ttRLbPErAL-gzGzoHsz","appKey":"aXgIpZV6AvkghCBXYTJ1EwhV","path":"window.location.pathname","placeholder":null,"avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":false,"recordIP":false,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          var imgSelector = '#valine .vcontent img:not(.vemoji)';
+          Fluid.plugins.imageCaption(imgSelector);
+          Fluid.plugins.fancyBox(imgSelector);
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>Table of Contents</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="leancloud-site-pv-container" style="display: none">
+        Views: 
+        <span id="leancloud-site-pv"></span>
+        
+      </span>
+    
+    
+      <span id="leancloud-site-uv-container" style="display: none">
+        Visitors: 
+        <span id="leancloud-site-uv"></span>
+        
+      </span>
+    
+    
+
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script defer src="/js/leancloud.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>

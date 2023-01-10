@@ -1,0 +1,815 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Zhiqi Li">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="由于书上讲的比较清楚，此处仅记录重点知识，梳理相关代码。 1.环境配置1.1 cmake1.1.1 基本使用 最基础的cmake 相关指令:project() 与 add_executable1234567# 声明要求的 cmake 最低版本 cmake_minimum_required( VERSION 2.8 ) # 声明一个 cmake 工程 project( HelloSLAM ) # 添">
+<meta property="og:type" content="article">
+<meta property="og:title" content="(2021-10-01)slam 14 courses-review">
+<meta property="og:url" content="http://example.com/2023/01/10/2021-10-01-slam-14-courses-review/index.html">
+<meta property="og:site_name" content="Zhiqi Li">
+<meta property="og:description" content="由于书上讲的比较清楚，此处仅记录重点知识，梳理相关代码。 1.环境配置1.1 cmake1.1.1 基本使用 最基础的cmake 相关指令:project() 与 add_executable1234567# 声明要求的 cmake 最低版本 cmake_minimum_required( VERSION 2.8 ) # 声明一个 cmake 工程 project( HelloSLAM ) # 添">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/aa1960d79a324003b5d55957f3e9d6ad.png">
+<meta property="article:published_time" content="2023-01-10T03:03:20.000Z">
+<meta property="article:modified_time" content="2023-01-10T03:14:04.455Z">
+<meta property="article:author" content="Zhiqi Li">
+<meta property="article:tag" content="slam">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://img-blog.csdnimg.cn/aa1960d79a324003b5d55957f3e9d6ad.png">
+  
+  
+  
+  <title>(2021-10-01)slam 14 courses-review - Zhiqi Li</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.4","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":"SnQVZ3g2ov3Rv5ttRLbPErAL-gzGzoHsz","app_key":"aXgIpZV6AvkghCBXYTJ1EwhV","server_url":"https://snqvz3g2.lc-cn-n1-shared.com","path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+  
+
+
+
+  
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 5.4.2"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Zhiqi Li</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>Home</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>Archives</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>Categories</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>Tags</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>About</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="(2021-10-01)slam 14 courses-review"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-01-10 11:03" pubdate>
+          January 10, 2023 am
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          5.8k words
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          49 mins
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="leancloud-page-views-container" class="post-meta" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="leancloud-page-views"></span> views
+        </span>
+        
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">(2021-10-01)slam 14 courses-review</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p>由于书上讲的比较清楚，此处仅记录重点知识，梳理相关代码。</p>
+<h1 id="1-环境配置"><a href="#1-环境配置" class="headerlink" title="1.环境配置"></a>1.环境配置</h1><h2 id="1-1-cmake"><a href="#1-1-cmake" class="headerlink" title="1.1 cmake"></a>1.1 cmake</h2><h3 id="1-1-1-基本使用"><a href="#1-1-1-基本使用" class="headerlink" title="1.1.1 基本使用"></a>1.1.1 基本使用</h3><ul>
+<li>最基础的cmake 相关指令:project() 与 add_executable<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs c"># 声明要求的 cmake 最低版本<br> cmake_minimum_required( VERSION <span class="hljs-number">2.8</span> )<br> # 声明一个 cmake 工程<br> project( HelloSLAM )<br> # 添加一个可执行程序<br> # 语法：add_executable( 程序名 源代码文件 ）<br> add_executable( helloSLAM helloSLAM.cpp )<br></code></pre></td></tr></table></figure></li>
+<li>相关使用<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs c">mkdir build<br>cd build<br>cmake ..<br>make<br></code></pre></td></tr></table></figure>
+<h3 id="1-1-2-生成库"><a href="#1-1-2-生成库" class="headerlink" title="1.1.2 生成库"></a>1.1.2 生成库</h3>将add_executable替换成add_library(.a后缀)<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c">add_library( hello libHelloSLAM.cpp )<br></code></pre></td></tr></table></figure>
+如果生成共享库(.so后缀)<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c">add_library( hello_shared SHARED libHelloSLAM.cpp )<br></code></pre></td></tr></table></figure>
+除了库文件,还需要提供一个头文件.头文件和库文件需要同时提供给用户<h3 id="1-1-3-使用库"><a href="#1-1-3-使用库" class="headerlink" title="1.1.3 使用库"></a>1.1.3 使用库</h3></li>
+<li>如果库与源代码在同一个位置下<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs c">add_executable( useHello useHello.cpp )<br>target_link_libraries( useHello hello_shared )<br></code></pre></td></tr></table></figure></li>
+<li>如果库与源代码不在同一个位置下</li>
+</ul>
+<h2 id="1-2-IDE-Kdevelop"><a href="#1-2-IDE-Kdevelop" class="headerlink" title="1.2 IDE Kdevelop"></a>1.2 IDE Kdevelop</h2><p>见34</p>
+<h1 id="2-知识部分"><a href="#2-知识部分" class="headerlink" title="2.知识部分"></a>2.知识部分</h1><h2 id="2-1-基础数学知识"><a href="#2-1-基础数学知识" class="headerlink" title="2.1 基础数学知识"></a>2.1 基础数学知识</h2><h3 id="2-1-1-外积的表示"><a href="#2-1-1-外积的表示" class="headerlink" title="2.1.1 外积的表示"></a>2.1.1 外积的表示</h3><p>p42</p>
+<ul>
+<li>对于向量引入运算^,该运算表示<br>$$<br>\left[\begin{array}{ccc}<br>0 &amp; -a_{3} &amp; a_{2} \<br>a_{3} &amp; 0 &amp; -a_{1} \</li>
+<li>a_{2} &amp; a_{1} &amp; 0<br>\end{array}\right]<br>$$<br>从而 $a\times b$=$a$^$b$</li>
+<li>坐标系之间的欧式变换<br>$$<br>\left[e_{1}, e_{2}, e_{3}\right]\left[\begin{array}{l}<br>a_{1} \<br>a_{2} \<br>a_{3}<br>\end{array}\right]=\left[e_{1}^{\prime}, e_{2}^{\prime}, e_{3}^{\prime}\right]\left[\begin{array}{c}<br>a_{1}^{\prime} \<br>a_{2}^{\prime} \<br>a_{3}^{\prime}<br>\end{array}\right]\Rightarrow\<br>\left[\begin{array}{l}<br>a_{1} \<br>a_{2} \<br>a_{3}<br>\end{array}\right]=\left[\begin{array}{lll}<br>e_{1}^{T} e_{1}^{\prime} &amp; e_{1}^{T} e_{2}^{\prime} &amp; e_{1}^{T} e_{3}^{\prime} \<br>e_{2}^{T} e_{1}^{\prime} &amp; e_{2}^{T} e_{2}^{\prime} &amp; e_{2}^{T} e_{3}^{\prime} \<br>e_{3}^{T} e_{1}^{\prime} &amp; e_{3}^{T} e_{2}^{\prime} &amp; e_{3}^{T} e_{3}^{\prime}<br>\end{array}\right]\left[\begin{array}{l}<br>a_{1}^{\prime} \<br>a_{2}^{\prime} \<br>a_{3}^{\prime}<br>\end{array}\right] \triangleq \boldsymbol{R} \boldsymbol{a}^{\prime}<br>$$<br>中间的矩阵记为R,其中$R^{-1}=R^T$</li>
+</ul>
+<h3 id="2-1-2-齐次坐标与特殊欧式群"><a href="#2-1-2-齐次坐标与特殊欧式群" class="headerlink" title="2.1.2 齐次坐标与特殊欧式群"></a>2.1.2 齐次坐标与特殊欧式群</h3><p>p46</p>
+<ul>
+<li>齐次坐标下的变化可以表示成特殊欧式群中的元素<br>$$<br>S E(3)=\left{T=\left[\begin{array}{cc}<br>R &amp; t \<br>0^{T} &amp; 1<br>\end{array}\right] \in \mathbb{R}^{4 \times 4} \mid R \in S O(3), t \in \mathbb{R}^{3}\right}<br>$$<h3 id="2-1-3-旋转向量与欧拉角"><a href="#2-1-3-旋转向量与欧拉角" class="headerlink" title="2.1.3 旋转向量与欧拉角"></a>2.1.3 旋转向量与欧拉角</h3>p50<h4 id="2-1-3-1-旋转向量"><a href="#2-1-3-1-旋转向量" class="headerlink" title="2.1.3.1 旋转向量"></a>2.1.3.1 旋转向量</h4></li>
+<li>起因:SO(3)的旋转矩阵有九个量,但是一次旋转只有三个自由度;同时旋转矩阵自身带有约束,不利于求解</li>
+<li>旋转向量:方向与旋转轴一致,而长度等于旋转角.事实上,旋转向量即使李代数.</li>
+</ul>
+<h4 id="2-1-3-2-罗德里格斯公式"><a href="#2-1-3-2-罗德里格斯公式" class="headerlink" title="2.1.3.2 罗德里格斯公式"></a>2.1.3.2 罗德里格斯公式</h4><p>-旋转向量到旋转矩阵的转换,公式为<br>$$<br>\boldsymbol{R}=\cos \theta \boldsymbol{I}+(1-\cos \theta) \boldsymbol{n} \boldsymbol{n}^{T}+\sin \theta \boldsymbol{n}^{\wedge}<br>$$</p>
+<ul>
+<li>旋转矩阵到旋转向量的转换,公式为<br>$$<br>\begin{aligned}<br>\operatorname{tr}(\boldsymbol{R}) &amp;=\cos \theta \operatorname{tr}(\boldsymbol{I})+(1-\cos \theta) \operatorname{tr}\left(\boldsymbol{n} \boldsymbol{n}^{T}\right)+\sin \theta \operatorname{tr}\left(\boldsymbol{n}^{\wedge}\right) \<br>&amp;=3 \cos \theta+(1-\cos \theta) \<br>&amp;=1+2 \cos \theta<br>\end{aligned}<br>$$<br>因此:<br>$$<br>\theta=\arccos \left(\frac{\operatorname{tr}(\boldsymbol{R})-1}{2}\right)<br>$$<br>关于转轴 $n$, 由于旋转轴上的向量在旋转后不发生改变, 说明<br>$$<br>R n=n<br>$$<br>因此，转轴 $n$ 是矩阵 $R$ 特征值 1 对应的特征向量。求解此方程, 再归一化, 就得到旋转轴</li>
+</ul>
+<h4 id="2-1-3-3-欧拉角"><a href="#2-1-3-3-欧拉角" class="headerlink" title="2.1.3.3 欧拉角"></a>2.1.3.3 欧拉角</h4><ul>
+<li>将旋转分解为三次绕不同轴的旋转,顺序为ZYX轴的旋转,三个角度为“偏航-俯仰-滚转”（yaw-pitch-roll）<br>用$[r,p,y]^T$表示</li>
+<li>万向锁问题:在俯仰角为±90◦ 时，第一次旋转与第三次旋转将使用同一个轴，使得系统丢失了一个自由度.<br>(理论上来首,三个实数表示三维旋转都有该问题,所以欧拉角<strong>不适合插值和迭代,只能用于人机交互</strong>)<br><img src="https://img-blog.csdnimg.cn/aa1960d79a324003b5d55957f3e9d6ad.png" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"><h3 id="2-1-4-四元数"><a href="#2-1-4-四元数" class="headerlink" title="2.1.4 四元数"></a>2.1.4 四元数</h3><h4 id="2-1-4-1-四元数定义"><a href="#2-1-4-1-四元数定义" class="headerlink" title="2.1.4.1 四元数定义"></a>2.1.4.1 四元数定义</h4></li>
+<li>找不到不带奇异性的三维向量的描述方式(三维旋转是一个三维流形,想要无奇异性地表达它,三个量是不够的)</li>
+<li>四元数是紧凑的,也没有奇异性<br>$$<br>q=q_{0}+q_{1} i+q_{2} j+q_{3} k<br>$$<br>其中 $i, j, k$ 为四元数的三个虚部<br>$$<br>\left{\begin{array}{l}<br>i^{2}=j^{2}=k^{2}=-1 \<br>i j=k, j i=-k \<br>j k=i, k j=-i \<br>k i=j, i k=-j<br>\end{array}\right.<br>$$<br>也可以表示成<br>$$<br>\boldsymbol{q}=[s, \boldsymbol{v}], \quad s=q_{0} \in \mathbb{R}, \boldsymbol{v}=\left[q_{1}, q_{2}, q_{3}\right]^{T} \in \mathbb{R}^{3}<br>$$<br>这里, $s$ 称为四元数的实部, 而 $v$ 称为它的虚部。</li>
+<li>旋转向量转换为<h4 id="2-1-4-2-四元数的运算"><a href="#2-1-4-2-四元数的运算" class="headerlink" title="2.1.4.2 四元数的运算"></a>2.1.4.2 四元数的运算</h4></li>
+<li>乘法</li>
+<li>共轭</li>
+<li>模长</li>
+<li>逆</li>
+<li>数乘与点乘<h4 id="2-1-4-3-四元数与旋转"><a href="#2-1-4-3-四元数与旋转" class="headerlink" title="2.1.4.3 四元数与旋转"></a>2.1.4.3 四元数与旋转</h4></li>
+<li>单元四元数表示空间中的一个旋转,乘以i表示绕着i轴旋转了180度(虽然i^2=-1)<h5 id="2-1-4-3-1-四元数表示旋转"><a href="#2-1-4-3-1-四元数表示旋转" class="headerlink" title="2.1.4.3.1 四元数表示旋转"></a>2.1.4.3.1 四元数表示旋转</h5>首先, 把三维空间点用一个虚四元数来描述:<br>$$<br>\boldsymbol{p}=[0, x, y, z]=[0, \boldsymbol{v}]<br>$$<br>这相当于我们把四元数的三个虚部与空间中的三个轴相对应。然后, 参照式 (3.19), 用四 元数 $q$ 表示这个旋转:<br>$$<br>\boldsymbol{q}=\left[\cos \frac{\theta}{2}, \boldsymbol{n} \sin \frac{\theta}{2}\right]<br>$$<br>那么, 旋转后的点 $p^{\prime}$ 即可表示为这样的乘积:<br>$$<br>p^{\prime}=q p q^{-1}<br>$$<br>计算结果的实部为 0 , 故为纯虚四元数。其虚部的三个分量表 示旋转后 $3 \mathrm{D}$ 点的坐标。<h5 id="2-1-4-3-2-四元数与旋转向量的转换"><a href="#2-1-4-3-2-四元数与旋转向量的转换" class="headerlink" title="2.1.4.3.2 四元数与旋转向量的转换"></a>2.1.4.3.2 四元数与旋转向量的转换</h5></li>
+<li>从旋转向量到四元数<br>$$<br>\boldsymbol{q}=\left[\cos \frac{\theta}{2}, n_{x} \sin \frac{\theta}{2}, n_{y} \sin \frac{\theta}{2}, n_{z} \sin \frac{\theta}{2}\right]^{T}<br>$$</li>
+<li>从四元数到旋转响铃<br>$$<br>\left{\begin{array}{l}<br>\theta=2 \arccos q_{0} \<br>{\left[n_{x}, n_{y}, n_{z}\right]^{T}=\left[q_{1}, q_{2}, q_{3}\right]^{T} / \sin \frac{\theta}{2}}<br>\end{array}\right.<br>$$<br>(旋转$2\pi$得到的是相反的四元数,虽然旋转到了原处)<h5 id="2-1-4-3-3-四元数与旋转矩阵的转换"><a href="#2-1-4-3-3-四元数与旋转矩阵的转换" class="headerlink" title="2.1.4.3.3 四元数与旋转矩阵的转换"></a>2.1.4.3.3 四元数与旋转矩阵的转换</h5>通过将四元数转换为旋转向量,再转换为矩阵需要计算arccos,太麻烦,通过下面的工作计算.<br>设四元数 $q=q_{0}+q_{1} i+q_{2} j+q_{3} k$, 对应的旋转矩阵 $R$ 为:<br>$$<br>\boldsymbol{R}=\left[\begin{array}{ccc}<br>1-2 q_{2}^{2}-2 q_{3}^{2} &amp; 2 q_{1} q_{2}+2 q_{0} q_{3} &amp; 2 q_{1} q_{3}-2 q_{0} q_{2} \<br>2 q_{1} q_{2}-2 q_{0} q_{3} &amp; 1-2 q_{1}^{2}-2 q_{3}^{2} &amp; 2 q_{2} q_{3}+2 q_{0} q_{1} \<br>2 q_{1} q_{3}+2 q_{0} q_{2} &amp; 2 q_{2} q_{3}-2 q_{0} q_{1} &amp; 1-2 q_{1}^{2}-2 q_{2}^{2}<br>\end{array}\right]<br>$$<br>反之，由旋转矩阵到四元数的转换如下。假设矩阵为 $\boldsymbol{R}=\left{m_{i j}\right}, i, j \in[1,2,3]$, 其对 应的四元数 $q$ 由下式给出:<br>$$<br>q_{0}=\frac{\sqrt{\operatorname{tr}(R)+1}}{2}, q_{1}=\frac{m_{23}-m_{32}}{4 q_{0}}, q_{2}=\frac{m_{31}-m_{13}}{4 q_{0}}, q_{3}=\frac{m_{12}-m_{21}}{4 q_{0}}<br>$$</li>
+<li>值得一提的是，由于 $\boldsymbol{q}$ 和 $-\boldsymbol{q}$ 表示同一个旋转, 事实上一个 $\boldsymbol{R}$ 对应的四元数表示并 不是惟一的。</li>
+<li>实际编程中,当 $q_{0}$ 接近 0 时, 其余三个分量会非常大，导致解不稳定，此时我们 再考虑使用其他的方式进行转换。</li>
+</ul>
+<h5 id="2-1-4-3-4-四元数的运算"><a href="#2-1-4-3-4-四元数的运算" class="headerlink" title="2.1.4.3.4  四元数的运算"></a>2.1.4.3.4  四元数的运算</h5><ul>
+<li>乘法:<br>$$<br>\begin{aligned}<br>\boldsymbol{q}<em>{a} \boldsymbol{q}</em>{b}=&amp; s_{a} s_{b}-x_{a} x_{b}-y_{a} y_{b}-z_{a} z_{b} \<br>&amp;+\left(s_{a} x_{b}+x_{a} s_{b}+y_{a} z_{b}-z_{a} y_{b}\right) i \<br>&amp;+\left(s_{a} y_{b}-x_{a} z_{b}+y_{a} s_{b}+z_{a} x_{b}\right) j \<br>&amp;+\left(s_{a} z_{b}+x_{a} y_{b}-y_{b} x_{a}+z_{a} s_{b}\right) k<br>\end{aligned}\<br>\boldsymbol{q}<em>{a} \boldsymbol{q}</em>{b}=[s_as_b-\boldsymbol{v}<em>{a} ^T\boldsymbol{v}</em>{b},s_a\boldsymbol{v}<em>{b}+s_b\boldsymbol{v}</em>{a}+\boldsymbol{v}<em>{a}\times \boldsymbol{v}</em>{b}]<br>$$</li>
+<li>共轭<br>四元数的共轭是把虚部取成相反数:<br>$$<br>\boldsymbol{q}<em>{a}^{*}=s</em>{a}-x_{a} i-y_{a} j-z_{a} k=\left[s_{a},-\boldsymbol{v}<em>{a}\right]<br>$$<br>四元数共轭与自己本身相乘，会得到一个实四元数, 其实部为模长的平方:<br>$$<br>q^{<em>} \boldsymbol{q}=\boldsymbol{q} \boldsymbol{q}^{</em>}=\left[s</em>{a}^{2}+\boldsymbol{v}^{T} \boldsymbol{v}, \mathbf{0}\right]<br>$$</li>
+<li>逆<br>$$<br>q^{-1}=q^*/||q||^2,(q_aq_b)^{-1}=(q_b)^{-1}(q_a)^{-1}<br>$$</li>
+<li>数乘与点乘 类似于向量的数乘和点乘/<h5 id="2-1-5-相似-仿射-射影变换"><a href="#2-1-5-相似-仿射-射影变换" class="headerlink" title="2.1.5 相似/仿射/射影变换"></a>2.1.5 相似/仿射/射影变换</h5></li>
+<li>相似变换<br>$$<br>T_{S}=\left[\begin{array}{ll}<br>s \boldsymbol{R} &amp; \boldsymbol{t} \<br>\mathbf{0}^{T} &amp; 1<br>\end{array}\right]<br>$$</li>
+<li>仿射变换<br>$$<br>T_{A}=\left[\begin{array}{ll}<br>A &amp; \boldsymbol{t} \<br>\mathbf{0}^{T} &amp; 1<br>\end{array}\right]<br>$$<br>其中只要求A是一个可逆矩阵,而不是正交矩阵</li>
+<li>射影变换<br>$$<br>T_{P}=\left[\begin{array}{ll}<br>A &amp; \boldsymbol{t} \<br>\mathbf{a}^{T} &amp; 1<br>\end{array}\right]<br>$$<br>可以对真个矩阵除以v得到一个右下角为1的矩阵,此时有15个自由度</li>
+<li>从真实世界到相机照片的变换可以看成一个射影变化,如果相机的i焦距为无穷远,那么这个变换则为仿射变换<h1 id="3-代码部分"><a href="#3-代码部分" class="headerlink" title="3.代码部分"></a>3.代码部分</h1></li>
+</ul>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/slam/">#slam</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>(2021-10-01)slam 14 courses-review</div>
+      <div>http://example.com/2023/01/10/2021-10-01-slam-14-courses-review/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>Zhiqi Li</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>January 10, 2023</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>Licensed under</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2023/01/10/2021-10-05-Games-102-Geometry-Review/" title="(2021-10-05)Games 102 Geometry-Review">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">(2021-10-05)Games 102 Geometry-Review</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/01/10/2021-09-28-3D-Reconstruction-Review-1/" title="(2021-09-28)3D-Reconstruction Review(1)">
+                        <span class="hidden-mobile">(2021-09-28)3D-Reconstruction Review(1)</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://lib.baomitu.com/valine/1.5.1/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"SnQVZ3g2ov3Rv5ttRLbPErAL-gzGzoHsz","appKey":"aXgIpZV6AvkghCBXYTJ1EwhV","path":"window.location.pathname","placeholder":null,"avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":false,"recordIP":false,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          var imgSelector = '#valine .vcontent img:not(.vemoji)';
+          Fluid.plugins.imageCaption(imgSelector);
+          Fluid.plugins.fancyBox(imgSelector);
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>Table of Contents</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="leancloud-site-pv-container" style="display: none">
+        Views: 
+        <span id="leancloud-site-pv"></span>
+        
+      </span>
+    
+    
+      <span id="leancloud-site-uv-container" style="display: none">
+        Visitors: 
+        <span id="leancloud-site-uv"></span>
+        
+      </span>
+    
+    
+
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script defer src="/js/leancloud.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>

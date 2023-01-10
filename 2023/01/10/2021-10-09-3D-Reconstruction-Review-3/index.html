@@ -1,0 +1,894 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Zhiqi Li">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="Advances in Geometry and Reflectance Acquisition (Course Notes)内容:  accurate acquisition methods for geometryand reflectance efficient acquisition pipeline to fulfill the demands of industry with resp">
+<meta property="og:type" content="article">
+<meta property="og:title" content="(2021-10-09)3D-Reconstruction Review(3)">
+<meta property="og:url" content="http://example.com/2023/01/10/2021-10-09-3D-Reconstruction-Review-3/index.html">
+<meta property="og:site_name" content="Zhiqi Li">
+<meta property="og:description" content="Advances in Geometry and Reflectance Acquisition (Course Notes)内容:  accurate acquisition methods for geometryand reflectance efficient acquisition pipeline to fulfill the demands of industry with resp">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/fb8c85ddc58a4b2ca99c204551d3b686.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAbGl6aGlxaV9jcmVhdG9y,size_13,color_FFFFFF,t_70,g_se,x_16">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/621edd2c96694a7693d8c83f4cbb5226.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAbGl6aGlxaV9jcmVhdG9y,size_19,color_FFFFFF,t_70,g_se,x_16">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/6f59bc98039e48c8947dfca41e01faa4.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAbGl6aGlxaV9jcmVhdG9y,size_18,color_FFFFFF,t_70,g_se,x_16">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/37a71529e2cf47fa8be387327a2cfc2d.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAbGl6aGlxaV9jcmVhdG9y,size_11,color_FFFFFF,t_70,g_se,x_16">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/19415e2bceff4a88a2612b54189c46f6.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/18cf65eb2b114917976606df67700f47.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAbGl6aGlxaV9jcmVhdG9y,size_11,color_FFFFFF,t_70,g_se,x_16">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/8b653c1a7deb4b97817e3e2e509ada9d.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAbGl6aGlxaV9jcmVhdG9y,size_15,color_FFFFFF,t_70,g_se,x_16">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/9ab9e3238c4f4aaabb90afc282f866af.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAbGl6aGlxaV9jcmVhdG9y,size_20,color_FFFFFF,t_70,g_se,x_16">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/aabed40d0cfa44c78884ce37573d946d.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAbGl6aGlxaV9jcmVhdG9y,size_14,color_FFFFFF,t_70,g_se,x_16">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/a5f343e6a15745cba11291f2078da9a7.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAbGl6aGlxaV9jcmVhdG9y,size_20,color_FFFFFF,t_70,g_se,x_16">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/04c9c4a6653e4f10bd10143e17e7de81.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAbGl6aGlxaV9jcmVhdG9y,size_20,color_FFFFFF,t_70,g_se,x_16">
+<meta property="article:published_time" content="2023-01-10T03:16:22.000Z">
+<meta property="article:modified_time" content="2023-01-10T03:16:42.038Z">
+<meta property="article:author" content="Zhiqi Li">
+<meta property="article:tag" content="3D-reconstruction">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://img-blog.csdnimg.cn/fb8c85ddc58a4b2ca99c204551d3b686.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAbGl6aGlxaV9jcmVhdG9y,size_13,color_FFFFFF,t_70,g_se,x_16">
+  
+  
+  
+  <title>(2021-10-09)3D-Reconstruction Review(3) - Zhiqi Li</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.4","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":"SnQVZ3g2ov3Rv5ttRLbPErAL-gzGzoHsz","app_key":"aXgIpZV6AvkghCBXYTJ1EwhV","server_url":"https://snqvz3g2.lc-cn-n1-shared.com","path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+  
+
+
+
+  
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 5.4.2"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Zhiqi Li</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>Home</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>Archives</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>Categories</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>Tags</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>About</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="(2021-10-09)3D-Reconstruction Review(3)"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-01-10 11:16" pubdate>
+          January 10, 2023 am
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          18k words
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          151 mins
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="leancloud-page-views-container" class="post-meta" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="leancloud-page-views"></span> views
+        </span>
+        
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">(2021-10-09)3D-Reconstruction Review(3)</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="Advances-in-Geometry-and-Reflectance-Acquisition-Course-Notes"><a href="#Advances-in-Geometry-and-Reflectance-Acquisition-Course-Notes" class="headerlink" title="Advances in Geometry and Reflectance Acquisition (Course Notes)"></a>Advances in Geometry and Reflectance Acquisition (Course Notes)</h1><p><strong>内容</strong>:</p>
+<ul>
+<li>accurate acquisition methods for geometry<br>and reflectance</li>
+<li>efficient acquisition pipeline to fulfill the demands of industry with respect to mass digitization of 3D contents</li>
+<li>different types of reflectance behavior ranging from diffuse over opaque to specular surfaces or even translucent and transparent surfaces</li>
+</ul>
+<p><strong>局限性</strong>:</p>
+<ul>
+<li> only well-suited for a limited range of surface materials</li>
+<li>not adequate if no prior information with respect to the surface reflectance behavior is available</li>
+<li>also discuss recent advances towards an efficient, fully automatic acquisition in the scope of the concluding remarks</li>
+</ul>
+<h1 id="1-Introduction"><a href="#1-Introduction" class="headerlink" title="1.Introduction"></a>1.Introduction</h1><p>对于人眼来说:</p>
+<ul>
+<li>观察到的颜色和材质 not appear arbitrarily,而是由每个材料不同的反射行为导致的,这些反射行为基于材料的特征以及外表面的形状,材质特点,光照特征的共同作用.</li>
+<li>通过对已经观察到的物体和材料的影响,可以推处further insights ,关于物理或者功能的材质</li>
+<li>Indeed, based on visual perception, we not only get impressions about a characteristic look but also an accompanying “feel” for materials.</li>
+</ul>
+<p>但是会碰到很多的digital objects or materials,存在这样的问题:<br>there is often no alternative to an accurate digitization of physical objects including both geometry and reflectance characteristics where even the finest details of surface geometry and surface materials should be accurately captured.</p>
+<h2 id="1-1-Material-Acquisition-in-Industry-and-Object-Digitization-in-Cultural-Heritage"><a href="#1-1-Material-Acquisition-in-Industry-and-Object-Digitization-in-Cultural-Heritage" class="headerlink" title="1.1 Material Acquisition in Industry and Object Digitization in Cultural Heritage"></a>1.1 Material Acquisition in Industry and Object Digitization in Cultural Heritage</h2><ul>
+<li>电影/游戏/广告等应用中的digital materials应该transport look and feel的特征,使得其表现的像真的一样,来增加其所在场景的真实性.</li>
+<li>In order to obtain accurate digitized surrogates of physical materials,<strong>both the surface profile and the surface reflectance behavior</strong> have to be acquired appropriately.</li>
+<li>除了上述的应用之外,还有很多应用需要3D的形状和反射行为,比如 digital preservation of objects for cultural heritage,比如通过 highly optimized devices as discussed in:[].</li>
+<li>虽然geometry常以点云等形式存储,但是反射率以n terms of different reflectance functions that describe the material appearance depending on a multitude of involved parameters进行存储<h2 id="1-2-The-Acquisition-Ecosystem"><a href="#1-2-The-Acquisition-Ecosystem" class="headerlink" title="1.2 The Acquisition Ecosystem"></a>1.2 The Acquisition Ecosystem</h2><img src="https://img-blog.csdnimg.cn/fb8c85ddc58a4b2ca99c204551d3b686.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAbGl6aGlxaV9jcmVhdG9y,size_13,color_FFFFFF,t_70,g_se,x_16" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></li>
+<li><strong>Hardware</strong>: required for the acquisition.包括各种sensor,照明设备,用来build a gantry或者搭建其他的设备的部件.</li>
+<li><strong>Calibration</strong>:techniques for the radiometric and geometric calibration of the involved components.通过Calibration techniques可以在多个view以及多个光照条件下观察物体.这需要考虑组件的arrangement以及sensor和照明设备的特征.</li>
+<li><strong>geometry acquisition techniques</strong>:为了可信的重建,该技术需要被用来得到geometry足够的细节.各种文献中已证明,不存在通用的处理可能由所有material组成的物体的技术,任意技术都局限在a limited fraction of the materials.</li>
+<li><strong>reflectance acquisition techniques</strong>:一样是a limited fraction of the materials.由于其复杂性导致了a number of parameters are resolved and measured.各种发射光照模型需要different acquisition devices进行配合.由于measure的参数越多,需要的时间就越长,所以人们选择合适的,只得到需要参数的模型.</li>
+<li><strong>visualization</strong>:visualization techniques to depict the digitized models.</li>
+<li><strong>assistance systems</strong>:increase the efficiency,such as e.g. a prior material recognition step</li>
+</ul>
+<h2 id="1-3-Course-Objectives"><a href="#1-3-Course-Objectives" class="headerlink" title="1.3  Course Objectives"></a>1.3  Course Objectives</h2><ul>
+<li> accurately capturing the 3D shape of objects and optical properties of materials is especially challenging for objects made of materials with complex reflectance behavior</li>
+<li>没有通用的方法,user typically selects appropriate ones based on his experience<br><img src="https://img-blog.csdnimg.cn/621edd2c96694a7693d8c83f4cbb5226.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAbGl6aGlxaV9jcmVhdG9y,size_19,color_FFFFFF,t_70,g_se,x_16" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></li>
+<li>对创建大量数字内容的需求也将重点转向automatic and highly efficient solutions.由于这里可能没有先验知识,the presence of the individual, occurring surface materials should guide the acquisition process.</li>
+<li>instead of naively processing(上面图片的过程中),只有那种物体表面部分的反射行为可方法对应时,才选择他们,这样更加高效.而且,based on the material properties, there is also the possibility to automatically detect cases where none of the available reconstruction techniques is appropriate.从而在actual acquisition之前,这里需要有个可信的对present surface materials.的识别,然后利用该信息取指导acquision的过程.<br><img src="https://img-blog.csdnimg.cn/6f59bc98039e48c8947dfca41e01faa4.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAbGl6aGlxaV9jcmVhdG9y,size_18,color_FFFFFF,t_70,g_se,x_16" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></li>
+<li><strong>这篇survey主要将三个方面的问题</strong><br>  1.advances in geometry acquisition(section 4),<br>  2.advances in reflectance acquisition(section 5),<br>  \3. concepts towards a more efficient automatic acquisition process(section 6)</li>
+</ul>
+<h1 id="2-Preliminaries-of-Material-Appearance"><a href="#2-Preliminaries-of-Material-Appearance" class="headerlink" title="2.Preliminaries of Material Appearance"></a>2.Preliminaries of Material Appearance</h1><ul>
+<li>分析mmaterial apperance,对material的性质以及他们如何能够从image content推导出来的研究是很重要的</li>
+<li><strong>key observation</strong>:the visual complexity of surface appearance is characterized by the complex interplay of surface material, surface geometry and illumination.</li>
+<li> <strong>a chicken-and-egg problem</strong>:standard acquisition devices值能够捕获the coupling of the respective modalities,而又需要将这些模式分开进行分析,而这又需要每个模式相关的priori information.</li>
+<li><strong>Section 2.1</strong>: the characteristics of material appearance and discuss the dependency of material appearance with respect to scale, illumination and surface geometry.</li>
+<li><strong>Section 2.2</strong>:从与反射性质导出的光线传输特征进行的a taxonomy of surface classes(relevant for 3D geometry acquisition)</li>
+<li><strong>Section 2.3</strong>: an overview of commonly used reflectance models<h2 id="2-1-Basics-of-Material-Appearance"><a href="#2-1-Basics-of-Material-Appearance" class="headerlink" title="2.1 Basics of Material Appearance"></a>2.1 Basics of Material Appearance</h2>We first may have a closer look at the underlying physical effects that characterize material appearance.Section 2.1.1中回顾radiometry 然后咋2.1.2中讨论 the physical background with respect to light exchange at material surfaces<h3 id="2-1-1-Radiometric-Quantities"><a href="#2-1-1-Radiometric-Quantities" class="headerlink" title="2.1.1 Radiometric Quantities"></a>2.1.1 Radiometric Quantities</h3></li>
+<li><strong>ray optics</strong>:由于光线直线传播的特点,光通常被表示成straight lines,并称之为 ray representation<br>A ray $\mathbf{r}$ can be parameterized as a mapping $\mathbb{R}^{+} \rightarrow \mathbb{R}^{3}$ using the ray origin $\mathbf{o} \in \mathbb{R}^{3}$ and a ray direction $\mathbf{d}=\left(d_{1}, d_{2}, d_{3}\right)^{T}$<br>$$<br>\begin{aligned}<br>\mathbf{r}: \mathbb{R}^{+} &amp; \rightarrow \mathbb{R}^{3} \<br>s &amp; \mapsto \mathbf{o}+s \mathbf{d}<br>\end{aligned}<br>$$</li>
+<li>对于polychromatic光(多色光,单色光称为monochromatic),常被表示为a spectral power distribution $\lambda\in R^+\to L(\lambda)\in R^+$,其中L是 electromagnetic radiative power.这些波长的框分为 ultraviolet (UV) spectrum,infrared (IR) spectrum以及可见光wavelengths λ between 380nm (violet) and 780 nm (red).本课程中,光一般用<strong>tristimulus values</strong> R/G/B 表示,<strong>他们的值可以通过</strong>derived from a spectral power distribution based on inner products with suitable color matching functions such as e.g. CIE RGB [Smith and Guild 1931].得到</li>
+<li><strong>radiant energy</strong>:Q[J],</li>
+</ul>
+<p><strong>the radiant flux or radiant power</strong>:$\Phi[J s^{-1}]=\frac{dQ}{dt}$<br>(flux中没有表示方向,但是光的反向是存在的,比如glossy or<br>specular materials)<br><strong>irradiance</strong>:$E=\frac{d\Phi}{dA}[Wm^{-2}]$( arriving at the surface)<br><strong>exitance</strong>:$E=\frac{d\Phi}{dA}[Wm^{-2}]$( leaving the surface)<br>对于surfaces with inhomogeneous flux,the irradiance or exitance depends on the local surface point x,$E=E(x)$<br>对于surfaces with homogeneous flux,the irradiance can be represented by the total flux per surface area<br><strong>intensity</strong>:$I=\frac{d\Phi}{d\omega}[W~sr^{-1}]$(The unit of the solid angle is Steradian [sr])<br>It defines the flux per differential solid angle.<br><strong>radiance</strong>:$L=\frac{d\Phi}{dAd\omega}[Wm^{-2}sr^{-1}]$(这里的A是projected differential area dA,沿着light flow的direction),所以又有公式<br>$L(\omega)=\frac{d^2\Phi}{dA_{\perp}d\omega}=\frac{d^2\Phi}{dAcos\theta d\omega}$,其中inclination angle θ is defined between the local surface normal n and the direction of the light flow<br><strong>重要公式</strong>:到达某个面元的irradiance可以通过在该表面的upper hemisphere Ω上进行积分得到<br>$$<br>E=\frac{\mathrm{d} \Phi}{\mathrm{d} A}=\int_{\Omega} L \cos (\theta) \mathrm{d} \omega<br>$$<br>可以发现,这里的$\theta$和$\omega$是相关的.</p>
+<ul>
+<li>在真空的假设下,, the radiance remains constant along a ray [Glassner 1995].而对于medium的情况,光线传播可以建模为interaction events that change the power of the light ray.</li>
+<li><strong>Polarization</strong>:describes the orientation of the electromagnetic wave perpendicular to the propagation direction in space.在识别技术中,偏振现象优势被用来 employing polarization filters to <strong>separate the direct and the global components</strong></li>
+</ul>
+<h3 id="2-1-2-Light-Interaction-at-Surfaces"><a href="#2-1-2-Light-Interaction-at-Surfaces" class="headerlink" title="2.1.2 Light Interaction at Surfaces"></a>2.1.2 Light Interaction at Surfaces</h3><p><img src="https://img-blog.csdnimg.cn/37a71529e2cf47fa8be387327a2cfc2d.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAbGl6aGlxaV9jcmVhdG9y,size_11,color_FFFFFF,t_70,g_se,x_16" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></p>
+<ul>
+<li>这里总共可能有12维(因为$x_i,x_r$在曲面上,所以他们分别是二维的)</li>
+<li>一般来说可以假设:<strong>“</strong> Typical assumptions made in the great majority of publications are that the light transport at the surface happens in an infinitesimal period (i.e. $t_i = t_r$), that there is no time dependency of the reflectance behavior (i.e.$t_0 = t_i = t_r$), that the wavelength remains unchanged (i.e. $λ_i = λ_r$) and that the incoming flux is completely reflected at the surface (i.e. $x_i = x_r$).<strong>“</strong></li>
+<li>考虑时需要分scale进行考虑”take into account that material appearance is a scale-dependent phenomenon”,分别是microscopic scale,a slightly coarser scale(相对于前面那个),mesoscopic scale,macroscopic scale.</li>
+<li>microscopic scale:domain of quantum optics,这些结构不会被眼睛观测,但是对材料外观有极大的贡献,determine the appearance of all materials.</li>
+<li>a slightly coarser scale:domain of wave optics(考虑光线和与波长近似的小结构interaction的现象,比如diffraction与polarization)</li>
+<li>mesoscopic scale:光线与表面上的fine details的相互作用,比如scratches,engraving,weave-patterns od textiles和embossing of leathers.这些表面的结构可能会导致 self-shadowing, self-occlusions,or interreflections <img src="https://img-blog.csdnimg.cn/19415e2bceff4a88a2612b54189c46f6.png" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></li>
+<li>macroscopic scale:3D geometry对于一些材质仍然影响其apperance.woven cloth, brushed metal等可能在照片中会distorted,因为其对物体geometry的依赖.</li>
+<li>但是上述几种scale只对近距离观察起作用.对于增加的距离,在fine surface detail上的the effect of light exchange会变得不可见.所以他们会被当成irregularities in a different kind of microscopic scale.例子:”shininess of specular objects or translucency might also depend on the distance between object and observer.”</li>
+<li>当考虑一个a highly specular surface with a rough surface profile from a close range时,因为人眼的分辨率足够将其分为不同的patch并得到其法向,所以这个材料显得specular.但是当距离增加时,只能够观察到superposition of these pathces.这样便会导致从specular到diffuse的过渡.然而,当考虑一个highly specular surfaces时,这个表面随着距离的增加仍然是specular的.</li>
+<li>这些现象表明:<strong>The definitinon of scale is of dynamic nature</strong>.<h2 id="2-2-A-Taxonomy-of-Surface-Classes"><a href="#2-2-A-Taxonomy-of-Surface-Classes" class="headerlink" title="2.2 A Taxonomy of Surface Classes"></a>2.2 A Taxonomy of Surface Classes</h2>前面已经提到,没有一种acquisition technique可以处理任意的材料,需要根据the acquisition principles applicable to the individual material groups 来分类材料.这些分组是与complexity of their visual appearance有关的.<br>这里只考虑固体的分类,不考虑volumetric phenomena(fog or fire).这里的分类是根据下面的survey进行的:<br>IHRKE, I., KUTULAKOS, K. N., LENSCH, H. P. A., MAGNOR, M., AND HEIDRICH, W. 2010. Transparent and specular object reconstruction. Computer Graphics Forum 29, 8, 2400–2426.<br><img src="https://img-blog.csdnimg.cn/18cf65eb2b114917976606df67700f47.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAbGl6aGlxaV9jcmVhdG9y,size_11,color_FFFFFF,t_70,g_se,x_16" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"><h3 id="2-2-1-Rough-Surfaces-with-Diffuse-or-Near-Diffuse-Reflectance"><a href="#2-2-1-Rough-Surfaces-with-Diffuse-or-Near-Diffuse-Reflectance" class="headerlink" title="2.2.1 Rough Surfaces with Diffuse or Near Diffuse Reflectance"></a>2.2.1 Rough Surfaces with Diffuse or Near Diffuse Reflectance</h3>需要注意的是,入射光和反射光这里有两个和法向相关的角,在diffuse的情形中,是如入射角有关,与反射角无关的.<br>$$<br>L_{diffuse}=L_ik_{diffuse}cos\theta,\<br>cos θ = n d_i<br>$$<br>这里k_{diffuse}是衡量表面diffusivity的常量.<h3 id="2-2-2-Glossy-Surfaces-with-Mixed-Diffuse-and-Specular-Reflectance"><a href="#2-2-2-Glossy-Surfaces-with-Mixed-Diffuse-and-Specular-Reflectance" class="headerlink" title="2.2.2  Glossy Surfaces with Mixed Diffuse and Specular Reflectance"></a>2.2.2  Glossy Surfaces with Mixed Diffuse and Specular Reflectance</h3>$$<br>L_{glossy}=L_{diffuse}+L_{specular}<br>$$<br>more light is reflected into preferred directions and the observed material appearance is view-dependent<h3 id="2-2-3-Smooth-Surfaces-with-Ideal-or-Near-Ideal-Specular-Reflectance"><a href="#2-2-3-Smooth-Surfaces-with-Ideal-or-Near-Ideal-Specular-Reflectance" class="headerlink" title="2.2.3 Smooth Surfaces with Ideal or Near Ideal Specular Reflectance"></a>2.2.3 Smooth Surfaces with Ideal or Near Ideal Specular Reflectance</h3>(almost) completely reflected into the direction:<br>$$<br>d_{o,ideal~reflection}=2n(nd_i)-d_i<br>$$<br>由于这种情况下,镜面反射的特征没有自己的characteristic appearance 而是反映的是surrounding environment in a view-dependent manner.所以the geometry reconstruction for objects with such a reflectance behavior is rather challenging<h3 id="2-2-4-Surfaces-Where-Light-is-Scattered-Multiple-Times-Underneath-the-Surface"><a href="#2-2-4-Surfaces-Where-Light-is-Scattered-Multiple-Times-Underneath-the-Surface" class="headerlink" title="2.2.4  Surfaces Where Light is Scattered Multiple Times Underneath the Surface"></a>2.2.4  Surfaces Where Light is Scattered Multiple Times Underneath the Surface</h3>这种现象在 translucent object中较多,由于光纤transport within the object导致的.一些光线进入物质进行scatter,然后意味着一部分的光线离开物质的位置和入射点不同.这将会导致a blurring of the observed pattern.这种现象 make a triangulation-based reconstruction from the decoded correspondences rather unreliable.<h3 id="2-2-5-Smooth-Surfaces-with-Ideal-or-Near-Ideal-Specular-Refraction"><a href="#2-2-5-Smooth-Surfaces-with-Ideal-or-Near-Ideal-Specular-Refraction" class="headerlink" title="2.2.5 Smooth Surfaces with Ideal or Near Ideal Specular Refraction"></a>2.2.5 Smooth Surfaces with Ideal or Near Ideal Specular Refraction</h3>Snell’s law:$\eta_{1} \sin \theta_{1}=\eta_{2} \sin \theta_{2}$<br>这里存在的问题是,objects might also exhibit inhomogeneous reflectance characteristics(树立在水中的木杆在交界处有一个kink),by a spatially varying refractive index or by inclusions of Lambertian or opaque material components as given in many minerals.<br><img src="https://img-blog.csdnimg.cn/8b653c1a7deb4b97817e3e2e509ada9d.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAbGl6aGlxaV9jcmVhdG9y,size_15,color_FFFFFF,t_70,g_se,x_16" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></li>
+</ul>
+<h2 id="2-3-常用的反射模型"><a href="#2-3-常用的反射模型" class="headerlink" title="2.3 常用的反射模型"></a>2.3 常用的反射模型</h2><p>摘要:论文中经常出现的<strong>SVBRDF,还有6D,4D模型</strong>怎么来的</p>
+<ul>
+<li>基于前面的分类,可以知道:diffuse and specular components以及可能发生的材料下的scattering以及refraction需要考虑进反射模型中,同时各种reflectance acquisition需要在相应的反射模型假设下进行设计.各种不同的模型针对于部分可能的材料,而且希望在尽可能少的参数下对材料在acceptable的时间中进行一个可信描绘.</li>
+<li>对于diffuse的物质,更多的考虑different material characteristics而不是modeling surface reflectance of mirrors,类似的,考虑同时有diffuse and specular或者translucent 和transparent的物质,considering the respectively relevant characteristics of the individual materials更加重要.即<strong>reflectance acquisition strongly depends on the representation used to model the reflectance of a particular material</strong></li>
+<li>很通用的表示:$\rho\left(\mathbf{x}<em>{i}, \theta</em>{i}, \varphi_{i}, t_{i}, \lambda_{i}, \mathbf{x}<em>{r}, \theta</em>{r}, \varphi_{r}, t_{r}, \lambda_{r}\right)$,这里$t_i=t_r,\lambda_i=\lambda_r$一般成立.<br><img src="https://img-blog.csdnimg.cn/9ab9e3238c4f4aaabb90afc282f866af.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAbGl6aGlxaV9jcmVhdG9y,size_20,color_FFFFFF,t_70,g_se,x_16" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></li>
+</ul>
+<p>详细称呼:</p>
+<ul>
+<li>BSSRDF:bidirectional scattering-surface reflectance distribution function</li>
+<li>SVBRDF:spatially-varying bidirectional reflectance distribution function</li>
+<li>BTF:bidirectional texture function</li>
+<li>BSSDF:bidirectional subsurface scattering distribution function</li>
+<li>BRDF: the bidirectional reflectance distribution function</li>
+<li>SLF:surface light field</li>
+<li>SRF:surface reflectance field</li>
+</ul>
+<p>一行一行的来理解:</p>
+<ul>
+<li>8D模型要求的是反射场定义在一个凸的表面删,然后viewpoint以及light都来自于bounding volume.这样可以通过base incideng light field的线性表达式来定义新的光照条件,</li>
+<li>8D到SVBRDF是假设没有内部的scatter,从而入射和反射点是一致的.而到BTF是假设各处入射光照都是一致的(light source infinitely far away),即$\rho_{L F, i}\left(\mathbf{x}<em>{i}, \theta</em>{i}, \varphi_{i}\right)=\rho_{L F, i}\left(\theta_{i}, \varphi_{i}\right) .$,所以这里SVBRDF和BTF看起来形式差不多,但是意义上有差别.<strong>n comparison to SVBRDFs, BTFs allow to capture local subsurface scattering characteristics as well as mesoscopic effects such as interreflections, self-masking or self-occlusions</strong>.当考虑各向同性的(homogeneous reflectance)是,8D模型由编程了BSSDF模型$\rho_{\mathrm{BSSDF}}\left(\theta_{i}, \varphi_{i}, \mathbf{x}<em>{r}-\mathbf{x}</em>{i}, \theta_{r}, \varphi_{r}\right)$</li>
+<li>在BSSRDF的基础上,再要求non-subsurface scattering reflectanc,得到BRDF.在BTF的基础上,固定lighting的方向得到SLF,固定view的方向得到SRF.</li>
+<li>对于2D模型来说,它是建立在diffuse reflectance的基础上的,得到texture maps of bump maps.</li>
+</ul>
+<p>上面的层次图来源于<br>M ¨ULLER, G., MESETH, J., SATTLER, M., SARLETTE, R., AND KLEIN, R. 2004. Acquisition, synthesis and rendering of bidirectional<br>texture functions. In Eurographics 2004 State of the Art Reports, 69–94.<br>后面在section 5还会继续讨论 individual reflectance models and their acquisition的细节.<br><strong>关于上面每个模型详细的论文见:p13</strong></p>
+<h1 id="3-Calibration"><a href="#3-Calibration" class="headerlink" title="3.Calibration"></a>3.Calibration</h1><ul>
+<li>为什么要讲Calibration?:<strong>If several measurements of the geometry in a scene or the corresponding reflectance behavior have been performed,these measurements need to be brought into some kind of reference system.</strong></li>
+<li>在这里仅仅为了<strong>establish an awareness regarding why individual calibration techniques are needed and some rather general ideas on how a calibration of individual setup components can be performed</strong>,对于细节来说,由于参考具体文献.</li>
+<li>由于individual components相对于物体表面的位置/方向以及device-specific 的特征对于geometry和reflectance的an accurate acquisition是很重要的.从而<strong>geometric calibration</strong>是很重要的,它可以得到 the involved illuminants, imaging sensors and the object surface during the acquisition之间的联系.这里还包括在投影中的相机的focal length以及principle point.<strong>radiometric calibration</strong>也是很重要的,它考虑了sensor以及illuminants的radiometric性质.这在将测得的反射性质用于 some kind of reference system for radiance中很重要.<h2 id="3-1-Geometric-Calibration"><a href="#3-1-Geometric-Calibration" class="headerlink" title="3.1 Geometric Calibration"></a>3.1 Geometric Calibration</h2></li>
+<li>The geometric calibration aims at the specification of <strong>relative positions and orientations</strong> of the individual components involved in the setup by either using <strong>certain known calibration objects or possibly also objects with unknown shape</strong></li>
+<li>对于这些物体的不同的观测需要进行register,同时需要考虑光源的位置.同时通常没有足够的sensor来提供足够稠密的view-light configurations.所以需要通过turntable来模拟很多sensor的效果.<h3 id="3-1-1-Camera-Calibration"><a href="#3-1-1-Camera-Calibration" class="headerlink" title="3.1.1 Camera Calibration"></a>3.1.1 Camera Calibration</h3>详细介绍见:HARTLEY, R. I., AND ZISSERMAN, A. 2004. Multiple view geometry in computer vision (2nd edition). Cambridge University Press,<br>Cambridge, UK<br>由于这一部分较为基础,不做记录,对应页号为P15</li>
+</ul>
+<h3 id="3-1-2-Light-Source-Calibration"><a href="#3-1-2-Light-Source-Calibration" class="headerlink" title="3.1.2 Light Source Calibration"></a>3.1.2 Light Source Calibration</h3><ul>
+<li>有些时候,虽然light source是放在一个机器臂上的,他们的位置可以直接得到,但是”positioning systems often do not offer the possibility for a precise specification of a light source position and orientation”,所以Calibration是必须的.</li>
+<li>下面的文章中用到的方法是基于一致位置以及半径的mirroring calibration sphere上的highlight observations.<br>(1) CHEN, T., GOESELE, M., AND SEIDEL, H.-P. 2006. Mesostructure from specularity. In Proceedings of the IEEE Conference on Computer<br>Vision and Pattern Recognition (CVPR), vol. 2, 1825–1832.<br>(2)WEINMANN, M., RUITERS, R., OSEP, A., SCHWARTZ, C., AND KLEIN, R. 2012. Fusing structured light consistency and Helmholtz<br>normals for 3d reconstruction. In Proceedings of the British Machine Vision Conference (BMVC), 1–12.<br>(3)SCHWARTZ, C., SARLETTE, R., WEINMANN, M., AND KLEIN, R. 2013. DOME II: A parallelized BTF acquisition system. In Proceedings<br>of the Eurographics Workshop on Material Appearance Modeling: Issues and Acquisition, 25–31.</li>
+<li>其关键想法是追踪从calibrated camera的perspective center出发的ray,穿过图片上highlight的位置,到达scene中,这里他们被一致的shpere geometry 反射.”Reflected rays obtained from highlights observed from multiple spheres allow the reconstruction of the light source position which is given by their intersection”<br><img src="https://img-blog.csdnimg.cn/aabed40d0cfa44c78884ce37573d946d.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAbGl6aGlxaV9jcmVhdG9y,size_14,color_FFFFFF,t_70,g_se,x_16" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></li>
+<li>而在这篇论文中:SCHWARTZ, C., SARLETTE, R., WEINMANN, M., RUMP, M., AND KLEIN, R. 2014. Design and implementation of practical bidirectional<br>texture function measurement devices focusing on the developments at the University of Bonn. Sensors 14, 5, 7753–7819.<br>使用来一种同时对光源位置以及calibration sphere的位置的非线性优化算法,来减少观察到的反射中的 re-projection error.</li>
+<li>在ACKERMANN, J., FUHRMANN, S., AND GOESELE, M. 2013. Geometric point light source calibration. In Proceedings of Vision, Modeling<br>and Visualization (VMV), 161–168.的论文中,与上面的方法相似,只是在优化的过程中没有refine calibration sphere.</li>
+<li>而在这两篇论文中,M ¨ULLER, G., MESETH, J., SATTLER, M., SARLETTE, R., AND KLEIN, R. 2004. Acquisition, synthesis and rendering of bidirectional<br>texture functions. In Eurographics 2004 State of the Art Reports, 69–94.<br>SCHWARTZ, C., WEINMANN, M., RUITERS, R., AND KLEIN, R. 2011. Integrated high-quality acquisition of geometry and appearance<br>for cultural heritage. In Proceedings of the International Symposium on Virtual Reality, Archaeology and Intelligent Cultural Heritage<br>(VAST), 25–32.<br>如果camera 的闪光也作为光源,那么光源的位置可以基于闪光相对于相机透视中心的偏移量进行估计<h3 id="3-1-3-Turntable-Calibration"><a href="#3-1-3-Turntable-Calibration" class="headerlink" title="3.1.3 Turntable Calibration"></a>3.1.3 Turntable Calibration</h3></li>
+<li>Turntable在大多数的setup中用来模拟更远处light source或者image sensor的存在.</li>
+<li>相当精准的对于turntable center和turntable axis的估计可以通过rotating calibration targets达到.这些target被相机观察到(相机也可以通过这些target进行标定),然后对应的观察可以用来得到turntable的参数.一些高质量的turntable可以直接提供足够精确度的rotation angle.<h2 id="3-2-Radiometric-Calibration"><a href="#3-2-Radiometric-Calibration" class="headerlink" title="3.2 Radiometric Calibration"></a>3.2 Radiometric Calibration</h2></li>
+<li>除了几何calibration之外,在使用像素值进行geometry以及reflectance的重建时,光源发出的光线的性质以及传感器将接收到的光转换为特定的像素值的特征也需要进行考虑.</li>
+<li>…<h1 id="4-Advances-in-Geometry-Acquisition"><a href="#4-Advances-in-Geometry-Acquisition" class="headerlink" title="4. Advances in Geometry Acquisition"></a>4. Advances in Geometry Acquisition</h1>尽管有很多几何重建的方法,但是经证明,许多传统的技巧不允许重建objects with arbitrary surface reflectance的geometry,而只能重建objects with a rather simple diffuse surface reflectance behavior.这也就导致来大量的diverse material-specific acquisition techniques,每个技巧只能针对于特定范围的材料.很多方法的材料分类根据前面Section 2的分类方法.<br>在介绍trend之前,首先我们在4.1节介绍an overview of standard principles (Section 4.1) that are used in many of the geometry acquisition techniques.<h2 id="4-1-Basic-Geometry-Acquisition-Principles"><a href="#4-1-Basic-Geometry-Acquisition-Principles" class="headerlink" title="4.1 Basic Geometry Acquisition Principles"></a>4.1 Basic Geometry Acquisition Principles</h2>The acquisition of the 3D surface geometry of objects can be approached based on different principles. The key differences of the individual methods include whether methods are <strong>active or passive, contact-based or non-contact-based and optical or non-optical</strong><br><img src="https://img-blog.csdnimg.cn/a5f343e6a15745cba11291f2078da9a7.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAbGl6aGlxaV9jcmVhdG9y,size_20,color_FFFFFF,t_70,g_se,x_16" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"><br><img src="https://img-blog.csdnimg.cn/04c9c4a6653e4f10bd10143e17e7de81.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAbGl6aGlxaV9jcmVhdG9y,size_20,color_FFFFFF,t_70,g_se,x_16" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></li>
+</ul>
+<p>Active methods就是可以向物体打a certain type of energy,并且可以被the components of the respective acquisition setup or in terms of contact-based feelers that produce a characteristic signal when touching the surface观测到,而passive的方法是只有fixed and distant illumination,并且关注对这种照明条件下optical object appearance的特征.</p>
+<h3 id="4-1-1-Principles-for-Passive-Geometry-Acquisition"><a href="#4-1-1-Principles-for-Passive-Geometry-Acquisition" class="headerlink" title="4.1.1 Principles for Passive Geometry Acquisition"></a>4.1.1 Principles for Passive Geometry Acquisition</h3><p><strong>observation and analysis of the optical appearance of objects under fixed illumination without systematic manipulations.</strong></p>
+<h4 id="4-1-1-1-Shape-from-Shading-Techniques"><a href="#4-1-1-1-Shape-from-Shading-Techniques" class="headerlink" title="4.1.1.1 Shape-from-Shading Techniques"></a>4.1.1.1 Shape-from-Shading Techniques</h4><ul>
+<li>image上面得到的一个view的2D的信息是不足以重建3D的物体形状的,这是由于该问题不适定性的本质导致的(ill-posed),为了能够重建表面的geometry,需要一些prior information或者assumption来得到额外的约束<br>(经常看到提远近场光的:<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/%E8%BF%91%E5%9C%BA%E5%85%89%E5%AD%A6/11045876?fr=aladdin">https://baike.baidu.com/item/%E8%BF%91%E5%9C%BA%E5%85%89%E5%AD%A6/11045876?fr=aladdin</a>)</li>
+<li>传统的shape-from-shading techniques基于分析单一的view观察到的,在可控的环境下可控的点光源光照下,观察到的intensity information,而illumination characteristics,比如波长以及它的origin(一般是远场光,the light source position is typically significantly farer away than the extents of the considered object surfaces)和方向由prior calibration procedure已知.但是现在的问题仍然是ill-posed.</li>
+<li>而对于diffuse surface的Lambert’s law,可以添加更多的约束:<br>$$<br>I(x,y=\alpha(x,y) r l \cdot n<br>$$<br>这里$I(x,y)$是2D图像上观察的的intensity,l是已知的incoming illumination,$\alpha(x,y)$是一致的表面的albedo.r是known intensity r of the illumination</li>
+<li>额外的广泛使用的假设包括 an orthographic image projection and the absence of shadows and interreflections(正射,没有阴影以及多次反射).然后现在的方程组对于一个像素只有一个约束,所以仍然是<strong>under-constrained</strong>的,这里对于每一个表面上的反向有两个未知的参数$p=\frac{dz}{dx}$以及$p=\frac{dz}{dy}$.因为这个原因,需要更近一步的假设,这个假设,假设$\alpha(x,y)$为常数,并且对法向$n$中的z分量进行normalization得到$n=[-p,-q,1]^T$,并且限制梯度(比如enforcing smoothness),或者使用the self-shadow boundary进行限制.</li>
+<li>针对于shape-from-shading更加详细的讨论见DUROU, J.-D., FALCONE, M., AND SAGONA, M. 2008. Numerical methods for shape-from-shading: A new survey with benchmarks.<br>Computer Vision and Image Understanding 109, 1, 22–43.</li>
+<li>在surface normal的基础上,表面的geometry可以通过法向场积分的技巧得到(normal field integration techniques.).大多数的shape-from-shading techniques都聚焦于单张图片的几何重建,因此<strong>only a 2.5D height map can be derived</strong></li>
+</ul>
+<h4 id="4-1-1-2-Shape-from-Texture-Techniques"><a href="#4-1-1-2-Shape-from-Texture-Techniques" class="headerlink" title="4.1.1.2 Shape-from-Texture Techniques"></a>4.1.1.2 Shape-from-Texture Techniques</h4><ul>
+<li>一些物质表现出了相当regular的表面样式可能可以用来surface reconstruction,比如fabrics(regular structure是由编织的样式决定的).Shape-from-Texture Techniques关注假定有regular statistical ot geometric surface pattern的物品的表面几何重建</li>
+</ul>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/3D-reconstruction/">#3D-reconstruction</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>(2021-10-09)3D-Reconstruction Review(3)</div>
+      <div>http://example.com/2023/01/10/2021-10-09-3D-Reconstruction-Review-3/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>Zhiqi Li</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>January 10, 2023</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>Licensed under</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2023/01/10/2021-10-10-3D-Reconstruction-Review-4/" title="(2021-10-10)3D-Reconstruction Review(4)">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">(2021-10-10)3D-Reconstruction Review(4)</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/01/10/2021-10-07-3D-Reconstruction-Review-2/" title="(2021-10-07)3D-Reconstruction Review(2)">
+                        <span class="hidden-mobile">(2021-10-07)3D-Reconstruction Review(2)</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://lib.baomitu.com/valine/1.5.1/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"SnQVZ3g2ov3Rv5ttRLbPErAL-gzGzoHsz","appKey":"aXgIpZV6AvkghCBXYTJ1EwhV","path":"window.location.pathname","placeholder":null,"avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":false,"recordIP":false,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          var imgSelector = '#valine .vcontent img:not(.vemoji)';
+          Fluid.plugins.imageCaption(imgSelector);
+          Fluid.plugins.fancyBox(imgSelector);
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>Table of Contents</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="leancloud-site-pv-container" style="display: none">
+        Views: 
+        <span id="leancloud-site-pv"></span>
+        
+      </span>
+    
+    
+      <span id="leancloud-site-uv-container" style="display: none">
+        Visitors: 
+        <span id="leancloud-site-uv"></span>
+        
+      </span>
+    
+    
+
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script defer src="/js/leancloud.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>

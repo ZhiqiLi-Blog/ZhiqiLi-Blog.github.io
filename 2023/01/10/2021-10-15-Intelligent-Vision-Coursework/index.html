@@ -1,0 +1,770 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Zhiqi Li">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="Use of Baser在该实验中主要通过opencv使用拍摄的棋盘格对相机进行calibration.求出相机的内参和外参.实验设备为basler工业相机.注:opencv的sample中有标准示例程序,这里的程序是自己写的仅供练习. 123456789101112131415161718192021222324252627282930313233343536373839404142434445">
+<meta property="og:type" content="article">
+<meta property="og:title" content="(2021-10-15)Intelligent Vision Coursework">
+<meta property="og:url" content="http://example.com/2023/01/10/2021-10-15-Intelligent-Vision-Coursework/index.html">
+<meta property="og:site_name" content="Zhiqi Li">
+<meta property="og:description" content="Use of Baser在该实验中主要通过opencv使用拍摄的棋盘格对相机进行calibration.求出相机的内参和外参.实验设备为basler工业相机.注:opencv的sample中有标准示例程序,这里的程序是自己写的仅供练习. 123456789101112131415161718192021222324252627282930313233343536373839404142434445">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/1e915609e65349de8562b708f2e4ff5b.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAbGl6aGlxaV9jcmVhdG9y,size_20,color_FFFFFF,t_70,g_se,x_16">
+<meta property="article:published_time" content="2023-01-10T03:21:24.000Z">
+<meta property="article:modified_time" content="2023-01-10T04:07:34.823Z">
+<meta property="article:author" content="Zhiqi Li">
+<meta property="article:tag" content="CV">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://img-blog.csdnimg.cn/1e915609e65349de8562b708f2e4ff5b.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAbGl6aGlxaV9jcmVhdG9y,size_20,color_FFFFFF,t_70,g_se,x_16">
+  
+  
+  
+  <title>(2021-10-15)Intelligent Vision Coursework - Zhiqi Li</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.4","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":"SnQVZ3g2ov3Rv5ttRLbPErAL-gzGzoHsz","app_key":"aXgIpZV6AvkghCBXYTJ1EwhV","server_url":"https://snqvz3g2.lc-cn-n1-shared.com","path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+  
+
+
+
+  
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 5.4.2"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Zhiqi Li</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>Home</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>Archives</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>Categories</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>Tags</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>About</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="(2021-10-15)Intelligent Vision Coursework"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-01-10 11:21" pubdate>
+          January 10, 2023 am
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          17k words
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          141 mins
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="leancloud-page-views-container" class="post-meta" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="leancloud-page-views"></span> views
+        </span>
+        
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">(2021-10-15)Intelligent Vision Coursework</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="Use-of-Baser"><a href="#Use-of-Baser" class="headerlink" title="Use of Baser"></a>Use of Baser</h1><p>在该实验中主要通过opencv使用拍摄的棋盘格对相机进行calibration.求出相机的内参和外参.实验设备为basler工业相机.<br>注:opencv的sample中有标准示例程序,这里的程序是自己写的仅供练习.</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;iostream&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;sstream&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;string&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;ctime&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;cstdio&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;vector&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;opencv2/core.hpp&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;opencv2/core/utility.hpp&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;opencv2/imgproc.hpp&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;opencv2/calib3d.hpp&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;opencv2/imgcodecs.hpp&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;opencv2/videoio.hpp&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;opencv2/highgui.hpp&gt;</span></span><br><br>using namespace cv;<br>using namespace <span class="hljs-built_in">std</span>;<br><span class="hljs-built_in">string</span> imageList[]=&#123;<span class="hljs-built_in">string</span>(<span class="hljs-string">&quot;./n1.JPG&quot;</span>),<span class="hljs-built_in">string</span>(<span class="hljs-string">&quot;./n2.JPG&quot;</span>),<span class="hljs-built_in">string</span>(<span class="hljs-string">&quot;./n3.JPG&quot;</span>),<span class="hljs-built_in">string</span>(<span class="hljs-string">&quot;./n4.JPG&quot;</span>),\<br><span class="hljs-built_in">string</span>(<span class="hljs-string">&quot;./n5.JPG&quot;</span>),<span class="hljs-built_in">string</span>(<span class="hljs-string">&quot;./n6.JPG&quot;</span>),<span class="hljs-built_in">string</span>(<span class="hljs-string">&quot;./n7.JPG&quot;</span>),<span class="hljs-built_in">string</span>(<span class="hljs-string">&quot;./n8.JPG&quot;</span>),\<br><span class="hljs-built_in">string</span>(<span class="hljs-string">&quot;./n9.JPG&quot;</span>),<span class="hljs-built_in">string</span>(<span class="hljs-string">&quot;./n10.JPG&quot;</span>),<span class="hljs-built_in">string</span>(<span class="hljs-string">&quot;./n11.JPG&quot;</span>),<span class="hljs-built_in">string</span>(<span class="hljs-string">&quot;./n12.JPG&quot;</span>)<br>&#125;;<br>CvSize <span class="hljs-title function_">boardSize</span><span class="hljs-params">(<span class="hljs-number">5</span>,<span class="hljs-number">7</span>)</span>;<br><span class="hljs-type">int</span> photo_size=<span class="hljs-number">12</span>;<br><span class="hljs-type">float</span> squareSize=<span class="hljs-number">50</span>;<br><span class="hljs-type">int</span> <span class="hljs-title function_">main</span><span class="hljs-params">()</span>&#123;<br>	<span class="hljs-built_in">vector</span>&lt; Point3f &gt; CornerPoints;<br>	<span class="hljs-built_in">vector</span>&lt;<span class="hljs-built_in">vector</span>&lt; Point3f &gt;&gt; ObjectPoints;<br>	<span class="hljs-built_in">vector</span>&lt;<span class="hljs-built_in">vector</span>&lt; Point2f &gt;&gt; imagePoints;<br>	<span class="hljs-built_in">vector</span>&lt;Mat&gt; save_view;<br>	<span class="hljs-type">bool</span> have_set=<span class="hljs-literal">false</span>;<br>	CvSize ImageSize;<br>	<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">0</span>;i&lt;photo_size;i++)&#123;<br>		<span class="hljs-comment">//reference to argument 2:https://blog.csdn.net/qq_27278957/article/details/84589526</span><br>		Mat view = imread(imageList[i], <span class="hljs-number">1</span>);<br>		<span class="hljs-built_in">cout</span>&lt;&lt;view.size()&lt;&lt;<span class="hljs-built_in">endl</span>;<br>         	imshow(<span class="hljs-string">&quot;input&quot;</span>, view);<span class="hljs-comment">//显示</span><br>		ImageSize=view.size();<br>		<span class="hljs-built_in">std</span>::<span class="hljs-built_in">vector</span>&lt;cv::Point2f&gt; ptvec;<br>		<span class="hljs-type">int</span>  corner_count=<span class="hljs-number">9</span>; <br>		<span class="hljs-comment">//the error for find==0:https://blog.csdn.net/u011651743/article/details/51099543</span><br>		<span class="hljs-type">bool</span> found = findChessboardCorners( view, boardSize, ptvec ,CALIB_CB_ADAPTIVE_THRESH );<br>		<span class="hljs-comment">//for more precise ,use  cvFindCornerSubPix</span><br>		<span class="hljs-comment">/*</span><br><span class="hljs-comment">		void cv::drawChessboardCorners(</span><br><span class="hljs-comment">			cv::InputOutputArray image, // 棋盘格图像（8UC3）即是输入也是输出</span><br><span class="hljs-comment">			cv::Size patternSize, // 棋盘格内部角点的行、列数</span><br><span class="hljs-comment">			cv::InputArray corners, // findChessboardCorners()输出的角点</span><br><span class="hljs-comment">			bool patternWasFound // findChessboardCorners()的返回值</span><br><span class="hljs-comment">		);</span><br><span class="hljs-comment">		*/</span><br>		drawChessboardCorners(view,boardSize,ptvec,found);<br>		imshow(<span class="hljs-string">&quot;input&quot;</span>, view);<br>		save_view.push_back(view);<br>		imagePoints.push_back(ptvec);<br>		<span class="hljs-keyword">if</span>(have_set==<span class="hljs-literal">false</span>)&#123;<br>			have_set=<span class="hljs-literal">true</span>;<br>			<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> j=<span class="hljs-number">0</span>;j&lt;boardSize.height;j++)&#123;<br>				<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> k=<span class="hljs-number">0</span>;k&lt;boardSize.width;k++)&#123;<br>					CornerPoints.push_back(Point3f(j*squareSize,k*squareSize,<span class="hljs-number">0</span>));					<br>				&#125;<br>							<br>			&#125;	<br>		&#125;<br><br>	&#125;<br>	ObjectPoints.resize(imagePoints.size(),CornerPoints);<br>	<br>	Mat cameraMatrix;<br>	cameraMatrix= Mat::eye(<span class="hljs-number">3</span>, <span class="hljs-number">3</span>, CV_64F);<br>        cameraMatrix.at&lt;<span class="hljs-type">double</span>&gt;(<span class="hljs-number">0</span>,<span class="hljs-number">0</span>) = <span class="hljs-number">1</span>;<br>	<br>	Mat distCoeffs;<br>	distCoeffs=Mat::zeros(<span class="hljs-number">8</span>, <span class="hljs-number">1</span>, CV_64F);<br>	<span class="hljs-type">int</span> iFixedPoint = <span class="hljs-number">-1</span>;<br>	<br>	<span class="hljs-built_in">vector</span>&lt;Mat&gt; rvecs;<span class="hljs-built_in">vector</span>&lt;Mat&gt; tvecs;<br>	<br>	<span class="hljs-type">double</span> rms = calibrateCamera(ObjectPoints, imagePoints, ImageSize,<br>                        cameraMatrix, distCoeffs, rvecs, tvecs,<br>                         CALIB_FIX_ASPECT_RATIO  | CALIB_USE_LU);<br>	<span class="hljs-built_in">cout</span>&lt;&lt;cameraMatrix&lt;&lt;<span class="hljs-built_in">endl</span>;<br>	<span class="hljs-comment">//now calculate the actual point for each feature;</span><br>	<span class="hljs-type">double</span> totalErr=<span class="hljs-number">0</span>,totalPoints=<span class="hljs-number">0</span>,err;<br>	<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">0</span>;i&lt;photo_size;i++)&#123;<br>		<span class="hljs-built_in">vector</span>&lt; Point2f &gt; projectedPoints;<br>		cv::projectPoints(ObjectPoints[i], rvecs[i], tvecs[i],cameraMatrix,\<br>			distCoeffs, projectedPoints);<br>		err = norm(imagePoints[i], projectedPoints, NORM_L2);<br>		<span class="hljs-built_in">cout</span>&lt;&lt;i&lt;&lt;<span class="hljs-string">&quot;:&quot;</span>&lt;&lt;<span class="hljs-built_in">endl</span>;<br>		<span class="hljs-comment">//for(int k=0;k&lt;imagePoints[i].size();k++)&#123;</span><br>		<span class="hljs-comment">//	cout&lt;&lt;imagePoints[i][k]&lt;&lt;&quot;:&quot;&lt;&lt;projectedPoints[k]&lt;&lt;endl;		</span><br>		<span class="hljs-comment">//&#125;</span><br>		drawChessboardCorners(save_view[i],boardSize,projectedPoints,<span class="hljs-literal">true</span>);<br>		imshow(<span class="hljs-string">&quot;input2&quot;</span>, save_view[i]);cv::waitKey(<span class="hljs-number">1000</span>);<br>		<span class="hljs-built_in">cout</span>&lt;&lt;err&lt;&lt;<span class="hljs-built_in">endl</span>;<br>		totalErr        += err*err;<br>        	totalPoints     += ObjectPoints[i].size();<br>		<span class="hljs-comment">//Mat rotate_matrix;</span><br>		<span class="hljs-comment">//Rodrigues(rvecs[i], rotate_matrix, noArray());</span><br>		<span class="hljs-comment">//	for(int j=0;j&lt;boardSize.width;j++)&#123;</span><br>		<span class="hljs-comment">//		for(int k=0;k&lt;boardSize.height;k++)&#123;</span><br>		<span class="hljs-comment">//			Mat p =(Mat_&lt;double&gt;(3,1)&lt;&lt;);</span><br>		<span class="hljs-comment">//		&#125;</span><br>		<span class="hljs-comment">//	&#125;</span><br>			<br>		<span class="hljs-comment">//cout&lt;&lt;rotate_matrix&lt;&lt;endl;</span><br>		<span class="hljs-comment">//cout&lt;&lt;rvecs[i].size()&lt;&lt;endl;</span><br>	&#125;<br>	<span class="hljs-built_in">cout</span>&lt;&lt;<span class="hljs-built_in">std</span>::<span class="hljs-built_in">sqrt</span>(totalErr/totalPoints)&lt;&lt;<span class="hljs-built_in">endl</span>;<br>	<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h1 id="Project"><a href="#Project" class="headerlink" title="Project"></a>Project</h1><p>这是智能视觉采集大作业的主要程序</p>
+<ul>
+<li>目的:从视频拍摄中得到全景图,包括离线的和在线的.</li>
+<li>过程:特征点提取匹配-图片射影变换-图片合成<br>  (1)特征点提取匹配:ORB算法<br>  (2)图片合成的方法分为两种,第一种是离线的,第二种是在线的(个人提出的拙劣的算法).<h2 id="1-离线合成"><a href="#1-离线合成" class="headerlink" title="1.离线合成"></a>1.离线合成</h2>离线部分和在线部分有一个不同的是图片合成算法.</li>
+<li>对于在线合成,速度时比较重要的,所以这里对于前后两帧的图片采用<br>$$<br>Img_t(i,j)=max{newImg_t(i,j),Img_{t-1}(i,j)}<br>$$<br>采用这种算法的原因是,新的图像经过射影变换后,在图片上会留有黑色的空位.需要通过依旧求得的全景图的部分对其进行填充.</li>
+<li>对于离线合成,精确度是比较重要的,所以这里采用下述算法<br>$$<br>Img_t(i,j)=\begin{cases}max{newImg_t(i,j),Img_{t-1}(i,j)},&amp;newImg_t(i,j)&lt;k \ \alpha newImg_t(i,j)+\beta Img_{t-1}(i,j),&amp;newImg_t(i,j)&gt;=k \end{cases}<br>$$<br>其中$\alpha+\beta=1$<br>由于图片经过变换后可能会产生部分没有对齐的情况,如果仍然采用离线的算法,将会导致黑色的物体在图像中渐渐的被掩盖掉(最典型的就是头发在全景图的生成过程中渐渐的消失).所以一般来说,在全景图的生成过程中都会使用新图和旧图乘一个系数合成的方法.同时我们仍然需要考虑到,新图经过射影变换后留有黑色空位的情况.所以,在该算法中,需要对新图的某个像素是黑色空位还是其他的情况进行区分,即设一个阈值k,用新图的像素与阈值进行比较.小于阈值,则进行加系数融合;如果大于阈值,则取最大值,消去黑色空位.</li>
+</ul>
+<p>离线部分代码</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br></pre></td><td class="code"><pre><code class="hljs c"><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;iostream&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;sstream&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;string&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;ctime&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;cstdio&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;vector&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;opencv2/opencv.hpp&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;opencv2/core.hpp&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;opencv2/core/utility.hpp&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;opencv2/imgproc.hpp&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;opencv2/calib3d.hpp&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;opencv2/imgcodecs.hpp&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;opencv2/videoio.hpp&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;opencv2/highgui.hpp&gt;</span></span><br><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;opencv2/video/background_segm.hpp&gt;</span></span><br><br>using namespace cv;<br>using namespace <span class="hljs-built_in">std</span>;<br><span class="hljs-type">int</span> <span class="hljs-title function_">main</span><span class="hljs-params">()</span>&#123;<br>    VideoCapture input=VideoCapture(<span class="hljs-string">&quot;input5.mp4&quot;</span>);<br>    <span class="hljs-keyword">if</span>(input.isOpened())&#123;<br>        <span class="hljs-built_in">cout</span>&lt;&lt;<span class="hljs-string">&quot;input sucess&quot;</span>&lt;&lt;<span class="hljs-built_in">endl</span>;<br>    &#125;<br>    <span class="hljs-keyword">else</span>&#123;<br>        <span class="hljs-built_in">cout</span>&lt;&lt;<span class="hljs-string">&quot;fail input&quot;</span>&lt;&lt;<span class="hljs-built_in">endl</span>;<br>        <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>    &#125;<br>    Mat view; <br>    <span class="hljs-type">int</span> cnt=<span class="hljs-number">0</span>;<br>    <span class="hljs-built_in">vector</span>&lt;Mat&gt; calibrate_images;<br>    <span class="hljs-built_in">vector</span>&lt;Mat&gt; calibrate_descriptors;<br>    <span class="hljs-built_in">vector</span>&lt;<span class="hljs-built_in">vector</span>&lt;KeyPoint&gt; &gt; calibrate_keypoints;<br>    Mat <span class="hljs-title function_">dst</span><span class="hljs-params">(<span class="hljs-number">720</span>+<span class="hljs-number">100</span>,<span class="hljs-number">1280</span>*<span class="hljs-number">6</span>, CV_8UC3)</span>;dst.setTo(<span class="hljs-number">0</span>);<br>    Mat save_homo;<br>    <span class="hljs-keyword">while</span>(<span class="hljs-number">1</span>)&#123;<br>        <span class="hljs-keyword">if</span>(!input.read(view)) <span class="hljs-keyword">break</span>;<br>        <span class="hljs-comment">//cout&lt;&lt;view.size&lt;&lt;endl;</span><br>        <span class="hljs-built_in">std</span>::<span class="hljs-built_in">vector</span>&lt;KeyPoint&gt; keypoints;<br>        Mat descriptors;<br>        Ptr&lt;FeatureDetector&gt; detector = ORB::create();<br>        Ptr&lt;DescriptorExtractor&gt; descriptor = ORB::create();<br>    <span class="hljs-comment">//Ptr&lt;DescriptorMatcher&gt; matcher  = DescriptorMatcher::create ( &quot;BruteForce-Hamming&quot; );</span><br>        detector-&gt;detect ( view,keypoints );<br>        descriptor-&gt;compute ( view, keypoints, descriptors );<br>        Mat outimg;<br>        calibrate_keypoints.push_back(keypoints);<br>        calibrate_descriptors.push_back(descriptors);<br>        drawKeypoints( view, keypoints, outimg, Scalar::all(<span class="hljs-number">-1</span>), DrawMatchesFlags::DEFAULT );<br>        <span class="hljs-comment">//imshow(&quot;ORB特征点&quot;,outimg);</span><br>        <span class="hljs-comment">//imshow(&quot;input&quot;, view);</span><br>        <span class="hljs-comment">//cv::waitKey(10000);</span><br>        <br>        calibrate_images.push_back(view);<br>        <span class="hljs-keyword">if</span>(view.rows==<span class="hljs-number">0</span>) <span class="hljs-keyword">break</span>;<br>        <span class="hljs-keyword">if</span>(cnt&gt;=<span class="hljs-number">1</span>)&#123;<br>            <span class="hljs-comment">//the first 15 images will be used calidate.</span><br>            Ptr&lt;DescriptorMatcher&gt; matcher  = DescriptorMatcher::create ( <span class="hljs-string">&quot;BruteForce-Hamming&quot;</span> );<br>            <span class="hljs-built_in">vector</span>&lt;DMatch&gt; matches;<br>            Mat img_match;<br>    <span class="hljs-comment">//BFMatcher matcher ( NORM_HAMMING );</span><br>            matcher-&gt;match ( calibrate_descriptors[cnt<span class="hljs-number">-1</span>],  calibrate_descriptors[cnt], matches );<br>            <span class="hljs-comment">//optimize</span><br>            <span class="hljs-type">double</span> min_dist=<span class="hljs-number">10000</span>, max_dist=<span class="hljs-number">0</span>;<br>            <span class="hljs-comment">//找出所有匹配之间的最小距离和最大距离, 即是最相似的和最不相似的两组点之间的距离</span><br>            <span class="hljs-keyword">for</span> ( <span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; calibrate_descriptors[cnt<span class="hljs-number">-1</span>].rows; i++ )<br>            &#123;<br>                <span class="hljs-type">double</span> dist = matches[i].distance;<br>                <span class="hljs-keyword">if</span> ( dist &lt; min_dist ) min_dist = dist;<br>                <span class="hljs-keyword">if</span> ( dist &gt; max_dist ) max_dist = dist;<br>            &#125;<br>            <span class="hljs-built_in">std</span>::<span class="hljs-built_in">vector</span>&lt; DMatch &gt; good_matches;<br>            <span class="hljs-keyword">for</span> ( <span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; calibrate_descriptors[cnt<span class="hljs-number">-1</span>].rows; i++ )<br>            &#123;<br>                <span class="hljs-keyword">if</span> ( matches[i].distance &lt;= max ( <span class="hljs-number">2</span>*min_dist, <span class="hljs-number">30.0</span> ) )<br>                &#123;<br>                    good_matches.push_back ( matches[i] );<br>                &#125;<br>            &#125;<br>            drawMatches ( calibrate_images[cnt<span class="hljs-number">-1</span>], calibrate_keypoints[cnt<span class="hljs-number">-1</span>], calibrate_images[cnt], calibrate_keypoints[cnt], good_matches, img_match );<br>            <span class="hljs-comment">//imshow(&quot;ORB特征点2&quot;,img_match);</span><br>            <br>            <span class="hljs-comment">//calibrate here</span><br>            <span class="hljs-comment">//**********************************************//</span><br>            <span class="hljs-built_in">vector</span>&lt;Point2f&gt; imagePoints1, imagePoints2;<br><br>            <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i&lt;good_matches.size(); i++)<br>            &#123;<br>                imagePoints2.push_back(calibrate_keypoints[cnt<span class="hljs-number">-1</span>][good_matches[i].queryIdx].pt);<br>                imagePoints1.push_back(calibrate_keypoints[cnt][good_matches[i].trainIdx].pt);<br>            &#125;<br><br>            Mat homo = findHomography(imagePoints1, imagePoints2, CV_RANSAC);<br>            <span class="hljs-keyword">if</span>(cnt==<span class="hljs-number">1</span>) save_homo=homo.clone();<br>            <span class="hljs-keyword">else</span> save_homo=save_homo*homo;<br>            homo=save_homo;<br><br>           <span class="hljs-comment">// cout&lt;&lt;homo&lt;&lt;endl;</span><br>            Mat imageTransform;<br>            warpPerspective(calibrate_images[cnt], imageTransform, homo, Size(calibrate_images[cnt].cols+<span class="hljs-number">1000</span>, calibrate_images[cnt].rows+<span class="hljs-number">100</span>));<br>            <span class="hljs-comment">//imshow(&quot;直接经过透视矩阵变换&quot;, imageTransform);</span><br>            <span class="hljs-comment">//imwrite(&quot;trans1.jpg&quot;, imageTransform);</span><br>            <span class="hljs-type">int</span> dst_width = imageTransform.cols;  <span class="hljs-comment">//取最右点的长度为拼接图的长度</span><br>            <br>            <span class="hljs-type">int</span> dst_height =calibrate_images[cnt].rows;<br>            <br>  <br>            Mat <span class="hljs-title function_">tem_dst</span><span class="hljs-params">(<span class="hljs-number">720</span>+<span class="hljs-number">100</span>,<span class="hljs-number">1280</span>*<span class="hljs-number">6</span>, CV_8UC3)</span>;tem_dst.setTo(<span class="hljs-number">0</span>);<br>            imageTransform.copyTo(tem_dst(Rect(<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, imageTransform.cols, imageTransform.rows)));<br>            Mat tem_dst2=dst.clone();<br>            <span class="hljs-comment">//calibrate_images[cnt].copyTo(dst(Rect(0, 0, calibrate_images[cnt].cols, calibrate_images[cnt].rows)));</span><br>            <span class="hljs-comment">//max(tem_dst,tem_dst2,dst);</span><br>            <span class="hljs-comment">//addWeighted(tem_dst, 0.1,tem_dst2,0.9, 0, dst);</span><br>            <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> j = <span class="hljs-number">0</span>; j &lt; tem_dst.rows; j++) &#123;<br>                <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> k = <span class="hljs-number">0</span>; k &lt; tem_dst.cols; k++) &#123;<br>                    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> m = <span class="hljs-number">0</span>; m &lt; <span class="hljs-number">3</span>; m++) &#123;<br>                        <span class="hljs-keyword">if</span> (tem_dst.at&lt;Vec3b&gt;(j, k)[m] &lt;= <span class="hljs-number">130</span>) &#123;<br>                            dst.at&lt;Vec3b&gt;(j, k)[m] = max(tem_dst2.at&lt;Vec3b&gt;(j, k)[m], tem_dst.at&lt;Vec3b&gt;(j, k)[m]);<br>                        &#125;<br>                        <span class="hljs-keyword">else</span> &#123;<br>                            dst.at&lt;Vec3b&gt;(j, k)[m] = (tem_dst2.at&lt;Vec3b&gt;(j, k)[m]*<span class="hljs-number">5</span>+ tem_dst.at&lt;Vec3b&gt;(j, k)[m]*<span class="hljs-number">5</span>)/<span class="hljs-number">10</span>;<br>                        &#125;<br>                    &#125;<br><span class="hljs-comment">//								cout&lt;&lt; tem_dst.at</span><br>                    <span class="hljs-comment">//if(tem_dst.at)</span><br>                &#125;<br>            &#125;<br>        imshow(<span class="hljs-string">&quot;b_dst&quot;</span>, dst);cv::waitKey(<span class="hljs-number">1000</span>);    <br>        &#125;<br>        <br>        <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">0</span>;i&lt;<span class="hljs-number">5</span>;i++)&#123;<br>            input.read(view);<br>        &#125;<br>        cnt++;<br>        <br>    &#125;<br>    <br>    cv::waitKey(<span class="hljs-number">1000000</span>);<br>    <span class="hljs-built_in">cout</span>&lt;&lt;cnt&lt;&lt;<span class="hljs-built_in">endl</span>;<br>&#125;<br><br></code></pre></td></tr></table></figure>
+<h2 id="2-在线合成"><a href="#2-在线合成" class="headerlink" title="2.在线合成"></a>2.在线合成</h2><p>在线合成前面已经提到了图像融合的算法.除此之外,在线和成主要是使用basler相机的代码.代码如下</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;pylon/PylonIncludes.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">ifdef</span> PYLON_WIN_BUILD</span><br><span class="hljs-meta">#    <span class="hljs-keyword">include</span> <span class="hljs-string">&lt;pylon/PylonGUI.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">endif</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;opencv2/opencv.hpp&gt;</span></span><br><br><span class="hljs-comment">// Namespace for using pylon objects.</span><br>using namespace Pylon;<br><br><span class="hljs-comment">// Namespace for using cout.</span><br>using namespace <span class="hljs-built_in">std</span>;<br>using namespace cv;<br><br><span class="hljs-comment">// Number of images to be grabbed.</span><br><span class="hljs-type">static</span> <span class="hljs-type">const</span> <span class="hljs-type">uint32_t</span> c_countOfImagesToGrab = <span class="hljs-number">1000</span>;<br><br><span class="hljs-type">int</span> <span class="hljs-title function_">main</span><span class="hljs-params">(<span class="hljs-type">int</span> argc, <span class="hljs-type">char</span>* argv[])</span><br>&#123;<br>	<span class="hljs-comment">// The exit code of the sample application.</span><br>	<span class="hljs-type">int</span> exitCode = <span class="hljs-number">0</span>;<br><br>	<span class="hljs-comment">// Before using any pylon methods, the pylon runtime must be initialized. </span><br>	PylonInitialize();<br>	Mat frame;<br>	<span class="hljs-comment">//****************************************************</span><br>	<span class="hljs-comment">//[2592 x 1944]</span><br>	Mat view;<br>	<span class="hljs-type">int</span> cnt = <span class="hljs-number">0</span>;<br>	<span class="hljs-built_in">vector</span>&lt;Mat&gt; calibrate_images;<br>	<span class="hljs-built_in">vector</span>&lt;Mat&gt; calibrate_descriptors;<br>	<span class="hljs-built_in">vector</span>&lt;<span class="hljs-built_in">vector</span>&lt;KeyPoint&gt; &gt; calibrate_keypoints;<br>	Mat <span class="hljs-title function_">dst</span><span class="hljs-params">(<span class="hljs-number">194</span> + <span class="hljs-number">50</span>, <span class="hljs-number">259</span> * <span class="hljs-number">10</span>, CV_8UC3)</span>; dst.setTo(<span class="hljs-number">0</span>);<br>	Mat save_homo;<br>	<span class="hljs-comment">//****************************************************</span><br>	try<br>	&#123;<br>		<span class="hljs-comment">// Create an instant camera object with the camera device found first.</span><br>		CInstantCamera <span class="hljs-title function_">camera</span><span class="hljs-params">(CTlFactory::GetInstance().CreateFirstDevice())</span>;<br><br>		<span class="hljs-comment">// Print the model name of the camera.</span><br>		<span class="hljs-built_in">cout</span> &lt;&lt; <span class="hljs-string">&quot;Using device &quot;</span> &lt;&lt; camera.GetDeviceInfo().GetModelName() &lt;&lt; <span class="hljs-built_in">endl</span>;<br><br>		<span class="hljs-comment">// The parameter MaxNumBuffer can be used to control the count of buffers</span><br>		<span class="hljs-comment">// allocated for grabbing. The default value of this parameter is 10.</span><br>		camera.MaxNumBuffer = <span class="hljs-number">5</span>;<br><br>		<span class="hljs-comment">// Start the grabbing of c_countOfImagesToGrab images.</span><br>		<span class="hljs-comment">// The camera device is parameterized with a default configuration which</span><br>		<span class="hljs-comment">// sets up free-running continuous acquisition.</span><br>		camera.StartGrabbing(c_countOfImagesToGrab);<br><br>		<span class="hljs-comment">// This smart pointer will receive the grab result data.</span><br>		CGrabResultPtr ptrGrabResult;<br>		<br>		<span class="hljs-comment">/// new image that convert to cv::Mat</span><br>		CImageFormatConverter formatConverter;<br>		formatConverter.OutputPixelFormat = PixelType_BGR8packed;<br>		CPylonImage pylonImage;<br>		<br>		<span class="hljs-comment">// Camera.StopGrabbing() is called automatically by the RetrieveResult() method</span><br>		<span class="hljs-comment">// when c_countOfImagesToGrab images have been retrieved.</span><br>		<span class="hljs-type">char</span> c;<br>		<span class="hljs-keyword">while</span> (c = waitKey(<span class="hljs-number">1</span>) &amp;&amp; camera.IsGrabbing())<br>		&#123;<br>			<span class="hljs-comment">// Wait for an image and then retrieve it. A timeout of 5000 ms is used.</span><br>			camera.RetrieveResult(<span class="hljs-number">5000</span>, ptrGrabResult, TimeoutHandling_ThrowException);<br><br>			<span class="hljs-comment">// Image grabbed successfully?</span><br>			<span class="hljs-keyword">if</span> (ptrGrabResult-&gt;GrabSucceeded())<br>			&#123;<br>				<span class="hljs-comment">// Access the image data.</span><br>				<span class="hljs-built_in">cout</span> &lt;&lt; <span class="hljs-string">&quot;SizeX: &quot;</span> &lt;&lt; ptrGrabResult-&gt;GetWidth() &lt;&lt; <span class="hljs-built_in">endl</span>;<br>				<span class="hljs-built_in">cout</span> &lt;&lt; <span class="hljs-string">&quot;SizeY: &quot;</span> &lt;&lt; ptrGrabResult-&gt;GetHeight() &lt;&lt; <span class="hljs-built_in">endl</span>;<br>				<span class="hljs-type">const</span> <span class="hljs-type">uint8_t</span> *pImageBuffer = (<span class="hljs-type">uint8_t</span> *)ptrGrabResult-&gt;GetBuffer();<br>				<span class="hljs-built_in">cout</span> &lt;&lt; <span class="hljs-string">&quot;Gray value of first pixel: &quot;</span> &lt;&lt; (<span class="hljs-type">uint32_t</span>)pImageBuffer[<span class="hljs-number">0</span>] &lt;&lt; <span class="hljs-built_in">endl</span> &lt;&lt; <span class="hljs-built_in">endl</span>;<br><br><span class="hljs-comment">//#ifdef PYLON_WIN_BUILD</span><br>				<span class="hljs-comment">// Display the grabbed image.</span><br>				<span class="hljs-comment">//Pylon::DisplayImage(1, ptrGrabResult);</span><br><span class="hljs-comment">//#endif</span><br>				<span class="hljs-comment">///convert to cv::Mat</span><br>				formatConverter.Convert(pylonImage, ptrGrabResult);<br>				frame = cv::Mat(ptrGrabResult-&gt;GetHeight(), ptrGrabResult-&gt;GetWidth(), CV_8UC3, (<span class="hljs-type">uint8_t</span> *)pylonImage.GetBuffer());<br>				<span class="hljs-comment">/// show</span><br>				<span class="hljs-comment">//resize(frame, frame, Size(frame.cols / 2, frame.rows / 2));</span><br>				<span class="hljs-built_in">cout</span> &lt;&lt; frame.size() &lt;&lt; <span class="hljs-built_in">endl</span>;<br>				imshow(<span class="hljs-string">&quot;OpenCV Display Window&quot;</span>, frame);<br>				<span class="hljs-keyword">if</span>(<span class="hljs-literal">true</span>)<br>				&#123;<br>					Mat <span class="hljs-title function_">view</span><span class="hljs-params">(<span class="hljs-number">194</span>, <span class="hljs-number">259</span>, frame.type())</span>;<br>					resize(frame, view, view.size(), <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, INTER_LINEAR);<br>					<span class="hljs-comment">//*****************************************************************************8</span><br>					<span class="hljs-built_in">std</span>::<span class="hljs-built_in">vector</span>&lt;KeyPoint&gt; keypoints;<br>					keypoints.resize(<span class="hljs-number">500</span>);<br>					Mat descriptors;<br>					Ptr&lt;FeatureDetector&gt; detector = ORB::create();<br>					Ptr&lt;DescriptorExtractor&gt; descriptor = ORB::create();<br>					<span class="hljs-comment">//Ptr&lt;DescriptorMatcher&gt; matcher  = DescriptorMatcher::create ( &quot;BruteForce-Hamming&quot; );</span><br>					<span class="hljs-built_in">cout</span> &lt;&lt; view.size &lt;&lt; <span class="hljs-built_in">endl</span>;<br>					detector-&gt;detect(view, keypoints);<br>					descriptor-&gt;compute(view, keypoints, descriptors);<br>					Mat outimg;<br>					calibrate_keypoints.push_back(keypoints);<br>					calibrate_descriptors.push_back(descriptors);<br>					drawKeypoints(view, keypoints, outimg, Scalar::all(<span class="hljs-number">-1</span>), DrawMatchesFlags::DEFAULT);<br>					<span class="hljs-comment">//imshow(&quot;ORB特征点&quot;,outimg);</span><br>					<span class="hljs-comment">//imshow(&quot;input&quot;, view);</span><br>					<span class="hljs-comment">//cv::waitKey(10000);</span><br><br>					calibrate_images.push_back(view);<br>					<span class="hljs-keyword">if</span> (cnt &gt;= <span class="hljs-number">1</span>) &#123;<br>						<span class="hljs-comment">//the first 15 images will be used calidate.</span><br>						Ptr&lt;DescriptorMatcher&gt; matcher = DescriptorMatcher::create(<span class="hljs-string">&quot;BruteForce-Hamming&quot;</span>);<br>						<span class="hljs-built_in">vector</span>&lt;DMatch&gt; matches;<br>						Mat img_match;<br>						<span class="hljs-comment">//BFMatcher matcher ( NORM_HAMMING );</span><br>						matcher-&gt;match(calibrate_descriptors[cnt - <span class="hljs-number">1</span>], calibrate_descriptors[cnt], matches);<br>						<span class="hljs-comment">//optimize</span><br>						<span class="hljs-type">double</span> min_dist = <span class="hljs-number">10000</span>, max_dist = <span class="hljs-number">0</span>;<br>						<span class="hljs-comment">//找出所有匹配之间的最小距离和最大距离, 即是最相似的和最不相似的两组点之间的距离</span><br>						<span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; calibrate_descriptors[cnt - <span class="hljs-number">1</span>].rows; i++)<br>						&#123;<br>							<span class="hljs-type">double</span> dist = matches[i].distance;<br>							<span class="hljs-keyword">if</span> (dist &lt; min_dist) min_dist = dist;<br>							<span class="hljs-keyword">if</span> (dist &gt; max_dist) max_dist = dist;<br>						&#125;<br>						<span class="hljs-built_in">std</span>::<span class="hljs-built_in">vector</span>&lt; DMatch &gt; good_matches;<br>						<span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; calibrate_descriptors[cnt - <span class="hljs-number">1</span>].rows; i++)<br>						&#123;<br>							<span class="hljs-keyword">if</span> (matches[i].distance &lt;= max(<span class="hljs-number">2</span> * min_dist, <span class="hljs-number">30.0</span>))<br>							&#123;<br>								good_matches.push_back(matches[i]);<br>							&#125;<br>						&#125;<br>						drawMatches(calibrate_images[cnt - <span class="hljs-number">1</span>], calibrate_keypoints[cnt - <span class="hljs-number">1</span>], calibrate_images[cnt], calibrate_keypoints[cnt], good_matches, img_match);<br>						<span class="hljs-comment">//imshow(&quot;ORB特征点2&quot;,img_match);</span><br><br>						<span class="hljs-comment">//calibrate here</span><br>						<span class="hljs-comment">//**********************************************//</span><br>						<span class="hljs-built_in">vector</span>&lt;Point2f&gt; imagePoints1, imagePoints2;<br><br>						<span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; good_matches.size(); i++)<br>						&#123;<br>							imagePoints2.push_back(calibrate_keypoints[cnt - <span class="hljs-number">1</span>][good_matches[i].queryIdx].pt);<br>							imagePoints1.push_back(calibrate_keypoints[cnt][good_matches[i].trainIdx].pt);<br>						&#125;<br><br>						Mat homo = findHomography(imagePoints1, imagePoints2, CV_RANSAC);<br>						<span class="hljs-keyword">if</span> (cnt == <span class="hljs-number">1</span>) save_homo = homo.clone();<br>						<span class="hljs-keyword">else</span> save_homo = save_homo * homo;<br>						homo = save_homo;<br><br>						<span class="hljs-comment">// cout&lt;&lt;homo&lt;&lt;endl;</span><br>						Mat imageTransform;<br>						warpPerspective(calibrate_images[cnt], imageTransform, homo, Size(calibrate_images[cnt].cols + <span class="hljs-number">1000</span>, calibrate_images[cnt].rows + <span class="hljs-number">50</span>));<br>						<span class="hljs-comment">//imshow(&quot;直接经过透视矩阵变换&quot;, imageTransform);</span><br>						<span class="hljs-comment">//imwrite(&quot;trans1.jpg&quot;, imageTransform);</span><br>						<span class="hljs-type">int</span> dst_width = imageTransform.cols;  <span class="hljs-comment">//取最右点的长度为拼接图的长度</span><br><br>						<span class="hljs-type">int</span> dst_height = calibrate_images[cnt].rows;<br>	<br><br>						Mat <span class="hljs-title function_">tem_dst</span><span class="hljs-params">(<span class="hljs-number">194</span> + <span class="hljs-number">50</span>,  <span class="hljs-number">259</span> * <span class="hljs-number">10</span>, CV_8UC3)</span>; tem_dst.setTo(<span class="hljs-number">0</span>);<br>						imageTransform.copyTo(tem_dst(Rect(<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, imageTransform.cols, imageTransform.rows)));<br>						Mat tem_dst2 = dst.clone();<br>						<span class="hljs-comment">//calibrate_images[cnt].copyTo(dst(Rect(0, 0, calibrate_images[cnt].cols, calibrate_images[cnt].rows)));</span><br>						max(tem_dst, tem_dst2, dst);<br>						<span class="hljs-comment">/*for (int j = 0; j &lt; tem_dst.rows; j++) &#123;</span><br><span class="hljs-comment">							for (int k = 0; k &lt; tem_dst.cols; k++) &#123;</span><br><span class="hljs-comment">								for (int m = 0; m &lt; 3; m++) &#123;</span><br><span class="hljs-comment">									if (tem_dst.at&lt;Vec3b&gt;(j, k)[m] &lt;= 10) &#123;</span><br><span class="hljs-comment">										dst.at&lt;Vec3b&gt;(j, k)[m] = max(tem_dst2.at&lt;Vec3b&gt;(j, k)[m], tem_dst.at&lt;Vec3b&gt;(j, k)[m]);</span><br><span class="hljs-comment">									&#125;</span><br><span class="hljs-comment">									else &#123;</span><br><span class="hljs-comment">										dst.at&lt;Vec3b&gt;(j, k)[m] = tem_dst2.at&lt;Vec3b&gt;(j, k)[m]*0.3+ tem_dst.at&lt;Vec3b&gt;(j, k)[m]*0.7;</span><br><span class="hljs-comment">									&#125;</span><br><span class="hljs-comment">								&#125;</span><br><span class="hljs-comment">//								cout&lt;&lt; tem_dst.at</span><br><span class="hljs-comment">								//if(tem_dst.at)</span><br><span class="hljs-comment">							&#125;</span><br><span class="hljs-comment">						&#125;</span><br><span class="hljs-comment">						*/</span><br>						<span class="hljs-comment">//max(tem_dst,0)</span><br>						<span class="hljs-comment">//cout &lt;&lt; dst &lt;&lt; endl;</span><br><br>						<span class="hljs-comment">//addWeighted(tem_dst, 0.3,tem_dst2,0.7, 0, dst);</span><br><br>						imshow(<span class="hljs-string">&quot;b_dst&quot;</span>, dst);<br>					&#125;<br>					<br>				&#125;<br>					cnt++;<br>	<br>				<br>				<span class="hljs-comment">//******************************************************************************</span><br>			&#125;<br>			<span class="hljs-keyword">else</span><br>			&#123;<br>				<span class="hljs-built_in">cout</span> &lt;&lt; <span class="hljs-string">&quot;Error: &quot;</span> &lt;&lt; ptrGrabResult-&gt;GetErrorCode() &lt;&lt; <span class="hljs-string">&quot; &quot;</span> &lt;&lt; ptrGrabResult-&gt;GetErrorDescription() &lt;&lt; <span class="hljs-built_in">endl</span>;<br>			&#125;<br>		&#125;<br>	&#125;<br>	catch (<span class="hljs-type">const</span> GenericException &amp;e)<br>	&#123;<br>		<span class="hljs-comment">// Error handling.</span><br>		<span class="hljs-built_in">cerr</span> &lt;&lt; <span class="hljs-string">&quot;An exception occurred.&quot;</span> &lt;&lt; <span class="hljs-built_in">endl</span><br>			&lt;&lt; e.GetDescription() &lt;&lt; <span class="hljs-built_in">endl</span>;<br>		exitCode = <span class="hljs-number">1</span>;<br>	&#125;<br><br>	<span class="hljs-comment">// Comment the following two lines to disable waiting on exit.</span><br>	<span class="hljs-built_in">cerr</span> &lt;&lt; <span class="hljs-built_in">endl</span> &lt;&lt; <span class="hljs-string">&quot;Press Enter to exit.&quot;</span> &lt;&lt; <span class="hljs-built_in">endl</span>;<br>	<span class="hljs-keyword">while</span> (<span class="hljs-built_in">cin</span>.get() != <span class="hljs-string">&#x27;\n&#x27;</span>);<br><br>	<span class="hljs-comment">// Releases all pylon resources. </span><br>	PylonTerminate();<br><br>	<span class="hljs-keyword">return</span> exitCode;<br>&#125;<br></code></pre></td></tr></table></figure>
+<h2 id="3结果"><a href="#3结果" class="headerlink" title="3结果"></a>3结果</h2><p><img src="https://img-blog.csdnimg.cn/1e915609e65349de8562b708f2e4ff5b.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAbGl6aGlxaV9jcmVhdG9y,size_20,color_FFFFFF,t_70,g_se,x_16" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/CV/">#CV</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>(2021-10-15)Intelligent Vision Coursework</div>
+      <div>http://example.com/2023/01/10/2021-10-15-Intelligent-Vision-Coursework/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>Zhiqi Li</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>January 10, 2023</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>Licensed under</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/01/10/2021-10-10-3D-Reconstruction-Review-4/" title="(2021-10-10)3D-Reconstruction Review(4)">
+                        <span class="hidden-mobile">(2021-10-10)3D-Reconstruction Review(4)</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://lib.baomitu.com/valine/1.5.1/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"SnQVZ3g2ov3Rv5ttRLbPErAL-gzGzoHsz","appKey":"aXgIpZV6AvkghCBXYTJ1EwhV","path":"window.location.pathname","placeholder":null,"avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":false,"recordIP":false,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          var imgSelector = '#valine .vcontent img:not(.vemoji)';
+          Fluid.plugins.imageCaption(imgSelector);
+          Fluid.plugins.fancyBox(imgSelector);
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>Table of Contents</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="leancloud-site-pv-container" style="display: none">
+        Views: 
+        <span id="leancloud-site-pv"></span>
+        
+      </span>
+    
+    
+      <span id="leancloud-site-uv-container" style="display: none">
+        Visitors: 
+        <span id="leancloud-site-uv"></span>
+        
+      </span>
+    
+    
+
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script defer src="/js/leancloud.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>

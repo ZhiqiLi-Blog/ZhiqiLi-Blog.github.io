@@ -1,0 +1,917 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Zhiqi Li">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="由于课件内容较为清楚,此处仅总结重要内容以及其他内容的索引 1.通论对应于课件1  计算机图形学:表现与表达三维数字对象 制作三维数据:几何数据,UV展开,纹理,材质,灯光,动画,… 几何内容的生成仍然是计算机图形学应用的瓶颈问题之一！2. 函数拟合对应于课件1,2 函数空间空间的完备性：这个函数空间是否可以表示（逼近）任意函数？ 万能逼近定理(Weierstrass)定理1：闭区间上的连续函数可">
+<meta property="og:type" content="article">
+<meta property="og:title" content="(2021-10-05)Games 102 Geometry-Review">
+<meta property="og:url" content="http://example.com/2023/01/10/2021-10-05-Games-102-Geometry-Review/index.html">
+<meta property="og:site_name" content="Zhiqi Li">
+<meta property="og:description" content="由于课件内容较为清楚,此处仅总结重要内容以及其他内容的索引 1.通论对应于课件1  计算机图形学:表现与表达三维数字对象 制作三维数据:几何数据,UV展开,纹理,材质,灯光,动画,… 几何内容的生成仍然是计算机图形学应用的瓶颈问题之一！2. 函数拟合对应于课件1,2 函数空间空间的完备性：这个函数空间是否可以表示（逼近）任意函数？ 万能逼近定理(Weierstrass)定理1：闭区间上的连续函数可">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/c5f68e207edf4403b2b789a668f2edbc.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAbGl6aGlxaV9jcmVhdG9y,size_18,color_FFFFFF,t_70,g_se,x_16">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/25835c304cc8425281324145104239ee.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/331e4d38b36a45b8916f5bb8996c13a4.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAbGl6aGlxaV9jcmVhdG9y,size_16,color_FFFFFF,t_70,g_se,x_16">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/f568a8373ac6421ebe64e125b82faa99.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/515e809e287e46faac5680b9f6a71cb8.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/4212d731fc264f8b97345ecacbe1d984.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/14c918d381e54a8596cc2446f6bfae6b.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/ea284536290349cbbe4c76f1ca88220c.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAbGl6aGlxaV9jcmVhdG9y,size_15,color_FFFFFF,t_70,g_se,x_16">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/e02337add4d546f4a145c95fae649fac.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAbGl6aGlxaV9jcmVhdG9y,size_15,color_FFFFFF,t_70,g_se,x_16">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/6478de48d3bb4238b882368183e8dfae.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAbGl6aGlxaV9jcmVhdG9y,size_17,color_FFFFFF,t_70,g_se,x_16">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/f520f20d2265423b8b8855856aca7e25.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAbGl6aGlxaV9jcmVhdG9y,size_15,color_FFFFFF,t_70,g_se,x_16">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/f832315a3d614d0ebe3f4cb32e04c1ed.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAbGl6aGlxaV9jcmVhdG9y,size_15,color_FFFFFF,t_70,g_se,x_16">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/ec5cd4e655e447ed8ee2cb9f9a7ed7c6.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/5e8c8a57ceeb4924b8994f05b20c22e6.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAbGl6aGlxaV9jcmVhdG9y,size_17,color_FFFFFF,t_70,g_se,x_16">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/73eb66c8a5054b2cb45053d4911942fe.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAbGl6aGlxaV9jcmVhdG9y,size_17,color_FFFFFF,t_70,g_se,x_16">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/17dec9abcf0142f88b25637d809fffec.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAbGl6aGlxaV9jcmVhdG9y,size_16,color_FFFFFF,t_70,g_se,x_16">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/b81c4a50a3af423c80d3429661d34231.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAbGl6aGlxaV9jcmVhdG9y,size_15,color_FFFFFF,t_70,g_se,x_16">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/d18a6334bc0d4b3eb04733ccb737b6c5.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAbGl6aGlxaV9jcmVhdG9y,size_17,color_FFFFFF,t_70,g_se,x_16">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/df0722118ff04ccd9e852c735ac0f8a6.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAbGl6aGlxaV9jcmVhdG9y,size_17,color_FFFFFF,t_70,g_se,x_16">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/c751a310ad834386b5949b23c7070226.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAbGl6aGlxaV9jcmVhdG9y,size_16,color_FFFFFF,t_70,g_se,x_16">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/5b42bfcc237d426891e8f9d981b13c0c.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAbGl6aGlxaV9jcmVhdG9y,size_14,color_FFFFFF,t_70,g_se,x_16">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/b1449d2e2a4444d59645482fa1b91d02.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAbGl6aGlxaV9jcmVhdG9y,size_19,color_FFFFFF,t_70,g_se,x_16">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/0204e0251d464fab940e1cf61582dab0.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/ed8e9e4076614befbea2c14afefd80ed.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAbGl6aGlxaV9jcmVhdG9y,size_14,color_FFFFFF,t_70,g_se,x_16">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/358c9b8629584bebb3e3d892c1010638.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAbGl6aGlxaV9jcmVhdG9y,size_14,color_FFFFFF,t_70,g_se,x_16">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/1826cbc445414a0783af8a8ac8e06c13.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAbGl6aGlxaV9jcmVhdG9y,size_16,color_FFFFFF,t_70,g_se,x_16">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/2d3067f8ec5647c2876fb0ae063d5d96.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAbGl6aGlxaV9jcmVhdG9y,size_17,color_FFFFFF,t_70,g_se,x_16">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/059d227265eb455a84144d2f495e68fa.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/4a1c275b9e4d4f85a6873e626cb42a35.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAbGl6aGlxaV9jcmVhdG9y,size_16,color_FFFFFF,t_70,g_se,x_16">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/3925fdedfb4340a6904acabd22a7d813.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAbGl6aGlxaV9jcmVhdG9y,size_15,color_FFFFFF,t_70,g_se,x_16">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/6086ceaf5ea14c8695e0fe9cc899c401.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAbGl6aGlxaV9jcmVhdG9y,size_18,color_FFFFFF,t_70,g_se,x_16">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/fb0066fd4cef4fcfb2ec85a38700d0c1.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAbGl6aGlxaV9jcmVhdG9y,size_15,color_FFFFFF,t_70,g_se,x_16">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/625131b043ee4f5981c7de7b13a27512.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAbGl6aGlxaV9jcmVhdG9y,size_15,color_FFFFFF,t_70,g_se,x_16">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/efcc72521ede49ccac39386264c7949d.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAbGl6aGlxaV9jcmVhdG9y,size_16,color_FFFFFF,t_70,g_se,x_16">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/ff1007cdf5be4f7e8c721291061e1d16.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAbGl6aGlxaV9jcmVhdG9y,size_12,color_FFFFFF,t_70,g_se,x_16">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/c425011d2b474d6188cd5d5067c90a5d.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAbGl6aGlxaV9jcmVhdG9y,size_11,color_FFFFFF,t_70,g_se,x_16">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/752015a8f4b64f6b8714cb1619670f74.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAbGl6aGlxaV9jcmVhdG9y,size_14,color_FFFFFF,t_70,g_se,x_16">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/32e9db81f71b42faba98cfb2ecf4c449.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/3bcfd95be1b74960b8c6a0b5f552af89.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAbGl6aGlxaV9jcmVhdG9y,size_16,color_FFFFFF,t_70,g_se,x_16">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/e48716bcd93c4fbc96dae346db24128d.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/f404b7e1c19641e9a943bbf2dcba6119.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/47bf9d4a19dc4867b400fbdb15b65f88.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/4da46688330648baba835cf24dd7f57c.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAbGl6aGlxaV9jcmVhdG9y,size_15,color_FFFFFF,t_70,g_se,x_16">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/39343d114b0e4673b426d3794cf9ab32.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAbGl6aGlxaV9jcmVhdG9y,size_14,color_FFFFFF,t_70,g_se,x_16">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/4ef459dd1f9b40bb8a7bb52a65658984.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAbGl6aGlxaV9jcmVhdG9y,size_17,color_FFFFFF,t_70,g_se,x_16">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/67954c1e6f4d48f8b946bef844edc531.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAbGl6aGlxaV9jcmVhdG9y,size_15,color_FFFFFF,t_70,g_se,x_16">
+<meta property="article:published_time" content="2023-01-10T03:05:44.000Z">
+<meta property="article:modified_time" content="2023-01-10T03:14:09.353Z">
+<meta property="article:author" content="Zhiqi Li">
+<meta property="article:tag" content="geoemtry">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://img-blog.csdnimg.cn/c5f68e207edf4403b2b789a668f2edbc.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAbGl6aGlxaV9jcmVhdG9y,size_18,color_FFFFFF,t_70,g_se,x_16">
+  
+  
+  
+  <title>(2021-10-05)Games 102 Geometry-Review - Zhiqi Li</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.4","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":"SnQVZ3g2ov3Rv5ttRLbPErAL-gzGzoHsz","app_key":"aXgIpZV6AvkghCBXYTJ1EwhV","server_url":"https://snqvz3g2.lc-cn-n1-shared.com","path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+  
+
+
+
+  
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 5.4.2"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Zhiqi Li</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>Home</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>Archives</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>Categories</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>Tags</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>About</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="(2021-10-05)Games 102 Geometry-Review"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-01-10 11:05" pubdate>
+          January 10, 2023 am
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          2.5k words
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          21 mins
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="leancloud-page-views-container" class="post-meta" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="leancloud-page-views"></span> views
+        </span>
+        
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">(2021-10-05)Games 102 Geometry-Review</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p>由于课件内容较为清楚,此处仅总结重要内容以及其他内容的索引</p>
+<h1 id="1-通论"><a href="#1-通论" class="headerlink" title="1.通论"></a>1.通论</h1><p>对应于课件1</p>
+<ul>
+<li>计算机图形学:表现与表达三维数字对象<br><img src="https://img-blog.csdnimg.cn/c5f68e207edf4403b2b789a668f2edbc.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAbGl6aGlxaV9jcmVhdG9y,size_18,color_FFFFFF,t_70,g_se,x_16" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></li>
+<li>制作三维数据:几何数据,UV展开,纹理,材质,灯光,动画,…</li>
+<li>几何内容的生成仍然是计算机图形学应用的瓶颈问题之一！<h1 id="2-函数拟合"><a href="#2-函数拟合" class="headerlink" title="2. 函数拟合"></a>2. 函数拟合</h1>对应于课件1,2</li>
+<li>函数空间<br><img src="https://img-blog.csdnimg.cn/25835c304cc8425281324145104239ee.png" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"><br>空间的完备性：这个函数空间是否可以表示（逼近）任意函数？</li>
+<li>万能逼近定理(Weierstrass)<br>定理1：闭区间上的连续函数可用多项式级<br>数一致逼近<br>定理2：闭区间上周期为2π的连续函数可用<br>三角函数级数一致逼近</li>
+<li>如何求满足要求的函数?<br><img src="https://img-blog.csdnimg.cn/331e4d38b36a45b8916f5bb8996c13a4.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAbGl6aGlxaV9jcmVhdG9y,size_16,color_FFFFFF,t_70,g_se,x_16" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"><br>方法:<br><img src="https://img-blog.csdnimg.cn/f568a8373ac6421ebe64e125b82faa99.png" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"><h2 id="2-1-数据拟合"><a href="#2-1-数据拟合" class="headerlink" title="2.1 数据拟合"></a>2.1 数据拟合</h2><h3 id="2-1-1-到哪找"><a href="#2-1-1-到哪找" class="headerlink" title="2.1.1 到哪找?"></a>2.1.1 到哪找?</h3></li>
+<li>选择一个函数空间<br>RBF:径向基函数 <a target="_blank" rel="noopener" href="https://www.cnblogs.com/hxsyl/p/5231389.html">https://www.cnblogs.com/hxsyl/p/5231389.html</a><br>成为核函数的基础:Mercer定理<br><a target="_blank" rel="noopener" href="https://baike.baidu.com/item/Mercer%E5%AE%9A%E7%90%86/19446322?fr=aladdin">https://baike.baidu.com/item/Mercer%E5%AE%9A%E7%90%86/19446322?fr=aladdin</a></li>
+<li>函数表达为基函数的线性组合<h3 id="2-1-2-找哪个与怎么找"><a href="#2-1-2-找哪个与怎么找" class="headerlink" title="2.1.2 找哪个与怎么找?"></a>2.1.2 找哪个与怎么找?</h3><h4 id="2-1-2-1-目标1"><a href="#2-1-2-1-目标1" class="headerlink" title="2.1.2.1 目标1"></a>2.1.2.1 目标1</h4></li>
+<li>函数要经过每一个数据点 插值(零误差)</li>
+<li>联立,求解线性方程组(用插值多项式可以直接得到结果),但是它们的本质都和线性方程组相关</li>
+<li>病态问题:系数矩阵条件数高时,求解不稳定.</li>
+<li>插值函数的自由度=未知量个数-已知量个数<h4 id="2-1-2-2-目标2"><a href="#2-1-2-2-目标2" class="headerlink" title="2.1.2.2 目标2"></a>2.1.2.2 目标2</h4></li>
+<li>函数尽量靠近数据点(逼近)<br><img src="https://img-blog.csdnimg.cn/515e809e287e46faac5680b9f6a71cb8.png" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></li>
+<li>对个系数求导,得正规方程<h4 id="2-1-2-3-避免过拟合的方法"><a href="#2-1-2-3-避免过拟合的方法" class="headerlink" title="2.1.2.3 避免过拟合的方法"></a>2.1.2.3 避免过拟合的方法</h4></li>
+<li>基函数选择</li>
+<li>岭回归(Ridge regression)–正则约束,还有方差正则项/系数正则项<br><img src="https://img-blog.csdnimg.cn/4212d731fc264f8b97345ecacbe1d984.png" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></li>
+<li>稀疏正则化(冗余基函数,通过优化来选择合适的基函数)—把多余的基函数给筛掉<br><img src="https://img-blog.csdnimg.cn/14c918d381e54a8596cc2446f6bfae6b.png" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"> - 稀疏正则化从另一个角度理解:压缩感知(这里实际上是一个重建的问题)<br><img src="https://img-blog.csdnimg.cn/ea284536290349cbbe4c76f1ca88220c.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAbGl6aGlxaV9jcmVhdG9y,size_15,color_FFFFFF,t_70,g_se,x_16" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"><h3 id="2-1-3-分段与光滑与逼近的比较"><a href="#2-1-3-分段与光滑与逼近的比较" class="headerlink" title="2.1.3 分段与光滑与逼近的比较"></a>2.1.3 分段与光滑与逼近的比较</h3></li>
+<li>分段函数数据误差为0,但是只有C0连续,不光滑</li>
+<li>光滑插值误差为0,但是可能被”差数据”带歪,导致函数性质不好,预测不可靠</li>
+<li>逼近拟合函数虽然误差不为0,但是足够小<h3 id="2-1-4-拟合方法"><a href="#2-1-4-拟合方法" class="headerlink" title="2.1.4 拟合方法"></a>2.1.4 拟合方法</h3><h4 id="2-1-4-1-多项式插值"><a href="#2-1-4-1-多项式插值" class="headerlink" title="2.1.4.1 多项式插值"></a>2.1.4.1 多项式插值</h4></li>
+<li>线性方程组矩阵为Vandermonde矩阵,方程组有唯一解</li>
+<li>拉格朗日和牛顿计算公式</li>
+<li>问题:系数矩阵稠密,依赖于基函数的选择,矩阵可能病态,导致难于求解(病态通过条件数衡量)<br><img src="https://img-blog.csdnimg.cn/e02337add4d546f4a145c95fae649fac.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAbGl6aGlxaV9jcmVhdG9y,size_15,color_FFFFFF,t_70,g_se,x_16" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></li>
+</ul>
+<p> <strong>注</strong>:相关性的含义是说高次幂函数之间的差别越来越小,这样在拟合时,数据偏一点,就到另一条基函数上去了.</p>
+<ul>
+<li><p>对于等距分布的数据点,范德蒙矩阵的条件数随着数据点数n呈指数级增长</p>
+</li>
+<li><p>好的基函数一般需要系数交替,互相抵消问题(防止基函数长得太近了)</p>
+</li>
+<li><p>解决方法L使用正交多项式基础</p>
+</li>
+<li><p>总结:多项式插值不稳定;Runge现象.</p>
+<h4 id="2-1-4-2-多项式逼近"><a href="#2-1-4-2-多项式逼近" class="headerlink" title="2.1.4.2 多项式逼近"></a>2.1.4.2 多项式逼近</h4></li>
+<li><p>为什么逼近?:数据点含噪声,更紧凑的表达,计算简单/更稳定</p>
+</li>
+<li><p>最小二乘逼近:<br><img src="https://img-blog.csdnimg.cn/6478de48d3bb4238b882368183e8dfae.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAbGl6aGlxaV9jcmVhdG9y,size_17,color_FFFFFF,t_70,g_se,x_16" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"><br><img src="https://img-blog.csdnimg.cn/f520f20d2265423b8b8855856aca7e25.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAbGl6aGlxaV9jcmVhdG9y,size_15,color_FFFFFF,t_70,g_se,x_16" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></p>
+<h4 id="2-1-4-3-函数空间的选择"><a href="#2-1-4-3-函数空间的选择" class="headerlink" title="2.1.4.3 函数空间的选择"></a>2.1.4.3 函数空间的选择</h4></li>
+<li><p>为什么使用多项式:稠密性与完备性—-表达能力足够</p>
+<h5 id="2-1-4-3-1-Bernstein多项式"><a href="#2-1-4-3-1-Bernstein多项式" class="headerlink" title="2.1.4.3.1 Bernstein多项式"></a>2.1.4.3.1 Bernstein多项式</h5></li>
+<li><p>可以使用Bernstein多项式做逼近<br><img src="https://img-blog.csdnimg.cn/f832315a3d614d0ebe3f4cb32e04c1ed.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAbGl6aGlxaV9jcmVhdG9y,size_15,color_FFFFFF,t_70,g_se,x_16" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></p>
+</li>
+<li><p>Bernstein多项式性质良好:凸包性,细分性,递归线性方程求解…</p>
+<h5 id="2-1-4-3-2-RBF函数插值-逼近"><a href="#2-1-4-3-2-RBF函数插值-逼近" class="headerlink" title="2.1.4.3.2 RBF函数插值/逼近"></a>2.1.4.3.2 RBF函数插值/逼近</h5></li>
+<li><p>RBF函数<br><img src="https://img-blog.csdnimg.cn/ec5cd4e655e447ed8ee2cb9f9a7ed7c6.png" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></p>
+</li>
+<li><p>在一维空间中即为Gauss函数<br><img src="https://img-blog.csdnimg.cn/5e8c8a57ceeb4924b8994f05b20c22e6.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAbGl6aGlxaV9jcmVhdG9y,size_17,color_FFFFFF,t_70,g_se,x_16" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></p>
+</li>
+<li><p>现在的问题是RBF函数需要选择,太瘦了重叠部分太小,拟合程度不高</p>
+</li>
+<li><p>解决方法:将均值方差一起带进来优化(只要$a_i,b_i$足够多,也能够稠密)<br><img src="https://img-blog.csdnimg.cn/73eb66c8a5054b2cb45053d4911942fe.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAbGl6aGlxaV9jcmVhdG9y,size_17,color_FFFFFF,t_70,g_se,x_16" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></p>
+</li>
+<li><p>换个方式看:神经网络</p>
+<h5 id="2-1-4-3-2-神经网络优化"><a href="#2-1-4-3-2-神经网络优化" class="headerlink" title="2.1.4.3.2 神经网络优化"></a>2.1.4.3.2 神经网络优化</h5></li>
+<li><p>上面Guass函数拟合换个方式看:<br><img src="https://img-blog.csdnimg.cn/17dec9abcf0142f88b25637d809fffec.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAbGl6aGlxaV9jcmVhdG9y,size_16,color_FFFFFF,t_70,g_se,x_16" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></p>
+</li>
+<li><p>神经网络的问题一般在于神经网络的结构与选择</p>
+</li>
+<li><p>Gauss函数的特性:拟局部性(不是凸的,只能得到局部值,比较适合神经网络来做).神经网络万能逼近定理<br><img src="https://img-blog.csdnimg.cn/b81c4a50a3af423c80d3429661d34231.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAbGl6aGlxaV9jcmVhdG9y,size_15,color_FFFFFF,t_70,g_se,x_16" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></p>
+</li>
+<li><p>多层神经网络:多重复合的函数(一般来说,深的比宽的要好一些)<br><img src="https://img-blog.csdnimg.cn/d18a6334bc0d4b3eb04733ccb737b6c5.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAbGl6aGlxaV9jcmVhdG9y,size_17,color_FFFFFF,t_70,g_se,x_16" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></p>
+</li>
+<li><p>用神经网络来拟合函数<br><img src="https://img-blog.csdnimg.cn/df0722118ff04ccd9e852c735ac0f8a6.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAbGl6aGlxaV9jcmVhdG9y,size_17,color_FFFFFF,t_70,g_se,x_16" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></p>
+</li>
+<li><p>Why it works?<br><img src="https://img-blog.csdnimg.cn/c751a310ad834386b5949b23c7070226.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAbGl6aGlxaV9jcmVhdG9y,size_16,color_FFFFFF,t_70,g_se,x_16" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></p>
+</li>
+</ul>
+<h1 id="2-曲线拟合"><a href="#2-曲线拟合" class="headerlink" title="2. 曲线拟合"></a>2. 曲线拟合</h1><h2 id="2-1-多元函数与映射"><a href="#2-1-多元函数与映射" class="headerlink" title="2.1 多元函数与映射"></a>2.1 多元函数与映射</h2><p>对应于课件3</p>
+<h3 id="2-1-1-多元函数"><a href="#2-1-1-多元函数" class="headerlink" title="2.1.1 多元函数"></a>2.1.1 多元函数</h3><ul>
+<li>基函数构造:张量积<br><img src="https://img-blog.csdnimg.cn/5b42bfcc237d426891e8f9d981b13c0c.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAbGl6aGlxaV9jcmVhdG9y,size_14,color_FFFFFF,t_70,g_se,x_16" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"><br>优点:定义简单;缺点:随着维数增加,基函数个数急剧增加,求解代价大</li>
+<li>用神经网络表达<br><img src="https://img-blog.csdnimg.cn/b1449d2e2a4444d59645482fa1b91d02.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAbGl6aGlxaV9jcmVhdG9y,size_19,color_FFFFFF,t_70,g_se,x_16" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"><h3 id="2-1-2-流形与映射"><a href="#2-1-2-流形与映射" class="headerlink" title="2.1.2 流形与映射"></a>2.1.2 流形与映射</h3></li>
+<li>流形是一个从低维到高维的映射;任何一个点,无穷小区域等价于一个圆盘</li>
+<li>降维映射(低维映射):降维映射一般有信息丢失,丢失的信息大部分不可逆,无法恢复.但是流形结构是可以恢复的.不可恢复优势也是有用的,比如提取信息,用于自编码器:m–&gt;n–&gt;m.<br>这也启示我们,调参的时候,隐藏层的维度不能太低,神经网络的本质:一个维度映射到另外一个维度</li>
+<li>二维到二维的映射或者三维到三维的映射:plane warp/space warp<h2 id="2-2-曲线拟合基础"><a href="#2-2-曲线拟合基础" class="headerlink" title="2.2 曲线拟合基础"></a>2.2 曲线拟合基础</h2>对应于课件3<br><img src="https://img-blog.csdnimg.cn/0204e0251d464fab940e1cf61582dab0.png" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"><h3 id="2-2-1-参数化问题"><a href="#2-2-1-参数化问题" class="headerlink" title="2.2.1 参数化问题"></a>2.2.1 参数化问题</h3>对应于课件3<br>观察上面误差度量的公式中,怎么知道数据点对应的参数?:这是个降维问题.求出参数后,然后极小化误差度量</li>
+<li>参数化方法:<br><img src="https://img-blog.csdnimg.cn/ed8e9e4076614befbea2c14afefd80ed.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAbGl6aGlxaV9jcmVhdG9y,size_14,color_FFFFFF,t_70,g_se,x_16" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"><br><img src="https://img-blog.csdnimg.cn/358c9b8629584bebb3e3d892c1010638.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAbGl6aGlxaV9jcmVhdG9y,size_14,color_FFFFFF,t_70,g_se,x_16" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></li>
+<li>点的参数化对曲线拟合的影响很大</li>
+</ul>
+<h3 id="2-2-2-曲面参数化"><a href="#2-2-2-曲面参数化" class="headerlink" title="2.2.2 曲面参数化"></a>2.2.2 曲面参数化</h3><p>对应于课件3<br>三维的点找二维的参数,降维问题<br>需要有好的几何性质,保局部的面积/长度/角度等几何性质,是好的.</p>
+<ul>
+<li>应用:地图绘制,纹理映射</li>
+</ul>
+<h2 id="2-3-三次样条函数"><a href="#2-3-三次样条函数" class="headerlink" title="2.3 三次样条函数"></a>2.3 三次样条函数</h2><p>对应于课件4<br><img src="https://img-blog.csdnimg.cn/1826cbc445414a0783af8a8ac8e06c13.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAbGl6aGlxaV9jcmVhdG9y,size_16,color_FFFFFF,t_70,g_se,x_16" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"><br><img src="https://img-blog.csdnimg.cn/2d3067f8ec5647c2876fb0ae063d5d96.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAbGl6aGlxaV9jcmVhdG9y,size_17,color_FFFFFF,t_70,g_se,x_16" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></p>
+<h3 id="2-3-1-力学解释"><a href="#2-3-1-力学解释" class="headerlink" title="2.3.1 力学解释"></a>2.3.1 力学解释</h3><p>见课件(贝努力-欧拉方程)<br>可以得到两压铁之间的函数为三次函数,即样条曲线为分段三次函数</p>
+<h3 id="2-3-2-数学性质"><a href="#2-3-2-数学性质" class="headerlink" title="2.3.2 数学性质"></a>2.3.2 数学性质</h3><h4 id="2-3-2-1-问题描述"><a href="#2-3-2-1-问题描述" class="headerlink" title="2.3.2.1 问题描述"></a>2.3.2.1 问题描述</h4><p><img src="https://img-blog.csdnimg.cn/059d227265eb455a84144d2f495e68fa.png" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></p>
+<p><img src="https://img-blog.csdnimg.cn/4a1c275b9e4d4f85a6873e626cb42a35.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAbGl6aGlxaV9jcmVhdG9y,size_16,color_FFFFFF,t_70,g_se,x_16" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></p>
+<h4 id="2-3-2-2-解决方法"><a href="#2-3-2-2-解决方法" class="headerlink" title="2.3.2.2 解决方法"></a>2.3.2.2 解决方法</h4><p><img src="https://img-blog.csdnimg.cn/3925fdedfb4340a6904acabd22a7d813.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAbGl6aGlxaV9jcmVhdG9y,size_15,color_FFFFFF,t_70,g_se,x_16" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"><br><img src="https://img-blog.csdnimg.cn/6086ceaf5ea14c8695e0fe9cc899c401.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAbGl6aGlxaV9jcmVhdG9y,size_18,color_FFFFFF,t_70,g_se,x_16" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"><br><img src="https://img-blog.csdnimg.cn/fb0066fd4cef4fcfb2ec85a38700d0c1.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAbGl6aGlxaV9jcmVhdG9y,size_15,color_FFFFFF,t_70,g_se,x_16" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"><br><img src="https://img-blog.csdnimg.cn/625131b043ee4f5981c7de7b13a27512.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAbGl6aGlxaV9jcmVhdG9y,size_15,color_FFFFFF,t_70,g_se,x_16" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></p>
+<ul>
+<li>在给定一次导数或者二次导数的时候计算三次插值公式,可以使用下面的简化技巧<br><img src="https://img-blog.csdnimg.cn/efcc72521ede49ccac39386264c7949d.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAbGl6aGlxaV9jcmVhdG9y,size_16,color_FFFFFF,t_70,g_se,x_16" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"><br><img src="https://img-blog.csdnimg.cn/ff1007cdf5be4f7e8c721291061e1d16.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAbGl6aGlxaV9jcmVhdG9y,size_12,color_FFFFFF,t_70,g_se,x_16" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"><h3 id="2-3-3-三次基样条"><a href="#2-3-3-三次基样条" class="headerlink" title="2.3.3 三次基样条"></a>2.3.3 三次基样条</h3></li>
+</ul>
+<p><strong>B样条教程</strong>:<br><a target="_blank" rel="noopener" href="https://blog.csdn.net/tuqu/article/details/5366701">https://blog.csdn.net/tuqu/article/details/5366701</a><br><img src="https://img-blog.csdnimg.cn/c425011d2b474d6188cd5d5067c90a5d.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAbGl6aGlxaV9jcmVhdG9y,size_11,color_FFFFFF,t_70,g_se,x_16" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></p>
+<h3 id="2-3-4-三次样条的缺点"><a href="#2-3-4-三次样条的缺点" class="headerlink" title="2.3.4 三次样条的缺点"></a>2.3.4 三次样条的缺点</h3><p><img src="https://img-blog.csdnimg.cn/752015a8f4b64f6b8714cb1619670f74.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAbGl6aGlxaV9jcmVhdG9y,size_14,color_FFFFFF,t_70,g_se,x_16" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></p>
+<h3 id="2-3-5-三次参数样条曲线"><a href="#2-3-5-三次参数样条曲线" class="headerlink" title="2.3.5 三次参数样条曲线"></a>2.3.5 三次参数样条曲线</h3><p><img src="https://img-blog.csdnimg.cn/32e9db81f71b42faba98cfb2ecf4c449.png" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></p>
+<h2 id="2-4-几何连续性"><a href="#2-4-几何连续性" class="headerlink" title="2.4 几何连续性"></a>2.4 几何连续性</h2><p>对应于课件4</p>
+<ul>
+<li>参数连续性过于严格，在几何设计中不太直观.连续性依赖于参数的选择，同一条曲线，参数不同，连续阶也不同.只需要在某一段引入一个参数变化,就会导致不连续的产生.</li>
+<li>几何连续性:<br><img src="https://img-blog.csdnimg.cn/3bcfd95be1b74960b8c6a0b5f552af89.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAbGl6aGlxaV9jcmVhdG9y,size_16,color_FFFFFF,t_70,g_se,x_16" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></li>
+<li>性质:<br><img src="https://img-blog.csdnimg.cn/e48716bcd93c4fbc96dae346db24128d.png" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></li>
+<li>具体形式: <img src="https://img-blog.csdnimg.cn/f404b7e1c19641e9a943bbf2dcba6119.png" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"><br>(G1实际上是将一个C1中的向量相等变成了方向相等)</li>
+</ul>
+<h2 id="2-4-Bezier曲线"><a href="#2-4-Bezier曲线" class="headerlink" title="2.4 Bezier曲线"></a>2.4 Bezier曲线</h2><p>对应于课件5</p>
+<h3 id="2-4-1-基本问题"><a href="#2-4-1-基本问题" class="headerlink" title="2.4.1 基本问题"></a>2.4.1 基本问题</h3><ul>
+<li>基本想法:<br><img src="https://img-blog.csdnimg.cn/47bf9d4a19dc4867b400fbdb15b65f88.png" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"><br><img src="https://img-blog.csdnimg.cn/4da46688330648baba835cf24dd7f57c.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAbGl6aGlxaV9jcmVhdG9y,size_15,color_FFFFFF,t_70,g_se,x_16" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></li>
+<li>为什么需要直观?这里涉及到建模的两种形式:<br><img src="https://img-blog.csdnimg.cn/39343d114b0e4673b426d3794cf9ab32.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAbGl6aGlxaV9jcmVhdG9y,size_14,color_FFFFFF,t_70,g_se,x_16" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"><h3 id="2-4-2-Bernstein基函数"><a href="#2-4-2-Bernstein基函数" class="headerlink" title="2.4.2 Bernstein基函数"></a>2.4.2 Bernstein基函数</h3></li>
+<li>候选方法:使用Bernstein基函数来表达.系数顶点与曲线关联性强,具有很好的几何意义.对于交互式曲线设计更加直观<br><img src="https://img-blog.csdnimg.cn/4ef459dd1f9b40bb8a7bb52a65658984.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAbGl6aGlxaV9jcmVhdG9y,size_17,color_FFFFFF,t_70,g_se,x_16" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"><ul>
+<li>几何性质:<br><img src="https://img-blog.csdnimg.cn/67954c1e6f4d48f8b946bef844edc531.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAbGl6aGlxaV9jcmVhdG9y,size_15,color_FFFFFF,t_70,g_se,x_16" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"><h3 id="2-4-3-Bezier曲线"><a href="#2-4-3-Bezier曲线" class="headerlink" title="2.4.3 Bezier曲线"></a>2.4.3 Bezier曲线</h3></li>
+</ul>
+</li>
+</ul>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/geoemtry/">#geoemtry</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>(2021-10-05)Games 102 Geometry-Review</div>
+      <div>http://example.com/2023/01/10/2021-10-05-Games-102-Geometry-Review/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>Zhiqi Li</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>January 10, 2023</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>Licensed under</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2023/01/10/2021-10-07-3D-Reconstruction-Review-2/" title="(2021-10-07)3D-Reconstruction Review(2)">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">(2021-10-07)3D-Reconstruction Review(2)</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/01/10/2021-10-01-slam-14-courses-review/" title="(2021-10-01)slam 14 courses-review">
+                        <span class="hidden-mobile">(2021-10-01)slam 14 courses-review</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://lib.baomitu.com/valine/1.5.1/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"SnQVZ3g2ov3Rv5ttRLbPErAL-gzGzoHsz","appKey":"aXgIpZV6AvkghCBXYTJ1EwhV","path":"window.location.pathname","placeholder":null,"avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":false,"recordIP":false,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          var imgSelector = '#valine .vcontent img:not(.vemoji)';
+          Fluid.plugins.imageCaption(imgSelector);
+          Fluid.plugins.fancyBox(imgSelector);
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>Table of Contents</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="leancloud-site-pv-container" style="display: none">
+        Views: 
+        <span id="leancloud-site-pv"></span>
+        
+      </span>
+    
+    
+      <span id="leancloud-site-uv-container" style="display: none">
+        Visitors: 
+        <span id="leancloud-site-uv"></span>
+        
+      </span>
+    
+    
+
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script defer src="/js/leancloud.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>
