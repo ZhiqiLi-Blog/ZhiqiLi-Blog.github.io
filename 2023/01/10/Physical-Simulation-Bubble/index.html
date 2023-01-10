@@ -16,18 +16,20 @@
   <meta name="author" content="Zhiqi Li">
   <meta name="keywords" content="">
   
-    <meta name="description" content="Zhiqi Li&#39;s Personal Blog">
+    <meta name="description" content="1. IntroductionThis is the report for reproduction of the paper,  (Siggraph 2021)Thin-Film Smoothed Particle Hydrodynamics Fluid.  This paper is about thin film in space, and topological deformation a">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Physical Simulation-Bubble">
 <meta property="og:url" content="http://example.com/2023/01/10/Physical-Simulation-Bubble/index.html">
 <meta property="og:site_name" content="Zhiqi Li">
-<meta property="og:description" content="Zhiqi Li&#39;s Personal Blog">
+<meta property="og:description" content="1. IntroductionThis is the report for reproduction of the paper,  (Siggraph 2021)Thin-Film Smoothed Particle Hydrodynamics Fluid.  This paper is about thin film in space, and topological deformation a">
 <meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/2023/01/10/Physical-Simulation-Bubble/Physical-Simulation-Bubble/sph_compare.png">
 <meta property="article:published_time" content="2023-01-10T04:18:14.000Z">
-<meta property="article:modified_time" content="2023-01-10T04:50:36.903Z">
+<meta property="article:modified_time" content="2023-01-10T14:01:13.810Z">
 <meta property="article:author" content="Zhiqi Li">
 <meta property="article:tag" content="Physical Simulation">
 <meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://example.com/2023/01/10/Physical-Simulation-Bubble/Physical-Simulation-Bubble/sph_compare.png">
   
   
   
@@ -239,7 +241,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          0 words
+          2.7k words
         
       </span>
     
@@ -250,7 +252,7 @@
         
         
         
-          1 mins
+          23 mins
         
       </span>
     
@@ -301,7 +303,45 @@
             
               <div class="markdown-body">
                 
-                
+                <h1 id="1-Introduction"><a href="#1-Introduction" class="headerlink" title="1. Introduction"></a>1. Introduction</h1><p>This is the report for reproduction of the paper,  (Siggraph 2021)Thin-Film Smoothed Particle Hydrodynamics Fluid.  This paper is about thin film in space, and topological deformation and thickness evolution on surface is simulated simultaneously.</p>
+<h1 id="2-Preliminaries"><a href="#2-Preliminaries" class="headerlink" title="2. Preliminaries"></a>2. Preliminaries</h1><h2 id="2-1-Lagrange-Methods"><a href="#2-1-Lagrange-Methods" class="headerlink" title="2.1 Lagrange Methods"></a>2.1 Lagrange Methods</h2><ul>
+<li>  Q: What is Lagrange Methods?</li>
+<li>  A: Fluid is discretized to particles and attributes of fluid are combined with particles.</li>
+</ul>
+<p>Compared with Euler Methods…</p>
+<ul>
+<li>Merits：<ul>
+<li>  Easy to parallism</li>
+<li>  Can simulate dramastic deformation </li>
+</ul>
+</li>
+<li>Demerits:<ul>
+<li>  Seeding and Reseeding need time</li>
+<li>  Not Suitable for incompressible fluid<br>Dramastic deformation is widely spread in film simulation, like bubbles, so Lagrange Methods is taken.</li>
+</ul>
+</li>
+</ul>
+<h2 id="2-2-SPH-Methods"><a href="#2-2-SPH-Methods" class="headerlink" title="2.2 SPH Methods"></a>2.2 SPH Methods</h2><h3 id="2-2-1-Formula"><a href="#2-2-1-Formula" class="headerlink" title="2.2.1 Formula"></a>2.2.1 Formula</h3><p>SPH (Smoothed Particle Hydrodynamics) is one of the popular Lagrange methods. It is inspired from the  Dirac delta function：<br>$$<br>    f(x)=\int_\Omega f(x’)\delta(x-x’)dx’, \delta(x-x’)=\begin{cases}\infty&amp;x=x’\0&amp;x\neq x’\end{cases}<br>$$<br>Delta function $\delta(x-x’)$ with a ‘point’ support and the equation for f(x) is not suitable to be discretized. Then a smoothing function $W(x-x’,h)$ is substitude it and $f(x)$ is approximated by<br>$$<br>&lt;f(x)&gt;=\int_\Omega f(x’)W(x-x’,h)dx’<br>$$</p>
+<h3 id="2-2-2-Kernel"><a href="#2-2-2-Kernel" class="headerlink" title="2.2.2 Kernel"></a>2.2.2 Kernel</h3><p>The SPH method is $h^2$ accuracy and the kernel function W($\cdot$,h) must satisfy the following properties.</p>
+<ul>
+<li>Unity (make SPH accurate): $\int_\Omega W(x-x’,h)dx’=1$</li>
+<li>Cappcat support(can be computed by discretization): W(x-x’)=0, when $|x-x’|&gt;kh$</li>
+<li>Pisitivity(satisfy physical scene): $W(x-x’)$ </li>
+<li>Decay (nearer points influence more) </li>
+<li>Smoothness (can support differential on particals)</li>
+<li>Symmetric(even function)</li>
+<li>Delta function property(consider the nature)</li>
+</ul>
+<h3 id="2-2-3-Select-Kernel"><a href="#2-2-3-Select-Kernel" class="headerlink" title="2.2.3 Select Kernel"></a>2.2.3 Select Kernel</h3><p>There are several kernels satisfying the property in 0.2.2, but people still select kernels cautiously.  Different kenels have some slight differences but this small differences will lead to large difference in simulation.</p>
+<p>This paper choose kerenels:<br>(1) Quartic spline Kernel (high order spline makes more closely approximation and more stable)<br>$$<br>    W(R,h)=\begin{cases}<br>        (R+2.5)^4-5(R+1.5)^4+10(R+0.5)^4&amp;0\le R\le \frac{1}{48}h\<br>        (2.5-R)^4-5(1.5-R)^4&amp;\frac{1}{48}h\le R \le \frac{1}{16}h\<br>        (2.5-R)^4&amp; \frac{1}{16}h\le R\le \frac{5}{48}h\<br>        0&amp;R&gt;\frac{5}{48}h<br>    \end{cases}<br>$$</p>
+<p>(2) Spiky Kernel(avoid clustering caused by inappropriate repulsive forces.)<br>$$<br>W_{spiky}(r) = \frac{15}{\pi h^{3}}(1 -\frac{r{3}}{h_{3}}) (0 \leq r \leq h)<br>$$</p>
+<p>For more details, refer to <strong>Smoothed Particle Hydrodynamics (SPH): an Overview<br>and Recent Developments</strong>.</p>
+<h3 id="2-2-4-Differential-on-Particles"><a href="#2-2-4-Differential-on-Particles" class="headerlink" title="2.2.4 Differential on Particles"></a>2.2.4 Differential on Particles</h3><p>The main reason for the popularity of SPH in fluid simulation is that it support the differential on particles easily and the differential of the kernel function can be convert to the differential of the SPH kernel, which is easy and fixed.  We will show the conversion for some differential operators below:<br><img src="./Physical-Simulation-Bubble/sph_compare.png" srcset="/img/loading.gif" lazyload></p>
+<h2 id="2-3-This-Paper-SPH-on-Surface"><a href="#2-3-This-Paper-SPH-on-Surface" class="headerlink" title="2.3 This Paper: SPH on Surface"></a>2.3 This Paper: SPH on Surface</h2><ul>
+<li>  The original method does not take the pattern on the bubble and film seriously and only the topology deformation is considered.  They implement the color pattern by adding some noise.</li>
+<li></li>
+</ul>
+
                 
               </div>
             
