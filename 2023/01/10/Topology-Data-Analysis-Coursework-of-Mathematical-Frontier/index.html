@@ -23,20 +23,20 @@
 <meta property="og:site_name" content="Zhiqi Li">
 <meta property="og:description" content="1. IntroductionThis report is related to persistent topology in TDA and it is divided into 2 parts, book report and project 2. Book Report2.1 背景介绍在这篇读书报告中，我主要对拓扑数据处理进行汇报，其中包括了两类算法：Mapper以及Persistent H">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="http://example.com/2023/01/10/Topology-Data-Analysis-Coursework-of-Mathematical-Frontier/Topology-Data-Analysis-Coursework-of-Mathematical-Frontier/%5Cimage-20221231214749154.png">
-<meta property="og:image" content="http://example.com/2023/01/10/Topology-Data-Analysis-Coursework-of-Mathematical-Frontier/Topology-Data-Analysis-Coursework-of-Mathematical-Frontier/image-20221231223713966.png">
-<meta property="og:image" content="http://example.com/2023/01/10/Topology-Data-Analysis-Coursework-of-Mathematical-Frontier/Topology-Data-Analysis-Coursework-of-Mathematical-Frontier/image-20221231235232073.png">
-<meta property="og:image" content="http://example.com/2023/01/10/Topology-Data-Analysis-Coursework-of-Mathematical-Frontier/Topology-Data-Analysis-Coursework-of-Mathematical-Frontier/image-20221231235819433.png">
-<meta property="og:image" content="http://example.com/2023/01/10/Topology-Data-Analysis-Coursework-of-Mathematical-Frontier/Topology-Data-Analysis-Coursework-of-Mathematical-Frontier/image-20221231235824148.png">
-<meta property="og:image" content="http://example.com/2023/01/10/Topology-Data-Analysis-Coursework-of-Mathematical-Frontier/Topology-Data-Analysis-Coursework-of-Mathematical-Frontier/image-20221231235839754.png">
-<meta property="og:image" content="http://example.com/2023/01/10/Topology-Data-Analysis-Coursework-of-Mathematical-Frontier/Topology-Data-Analysis-Coursework-of-Mathematical-Frontier/image-20221231235855673.png">
-<meta property="og:image" content="http://example.com/2023/01/10/Topology-Data-Analysis-Coursework-of-Mathematical-Frontier/Topology-Data-Analysis-Coursework-of-Mathematical-Frontier/image-20221231235915054.png">
+<meta property="og:image" content="http://example.com/2023/01/10/Topology-Data-Analysis-Coursework-of-Mathematical-Frontier/image-20221231214749154.png">
+<meta property="og:image" content="http://example.com/2023/01/10/Topology-Data-Analysis-Coursework-of-Mathematical-Frontier/image-20221231223713966.png">
+<meta property="og:image" content="http://example.com/2023/01/10/Topology-Data-Analysis-Coursework-of-Mathematical-Frontier/image-20221231235232073.png">
+<meta property="og:image" content="http://example.com/2023/01/10/Topology-Data-Analysis-Coursework-of-Mathematical-Frontier/image-20221231235819433.png">
+<meta property="og:image" content="http://example.com/2023/01/10/Topology-Data-Analysis-Coursework-of-Mathematical-Frontier/image-20221231235824148.png">
+<meta property="og:image" content="http://example.com/2023/01/10/Topology-Data-Analysis-Coursework-of-Mathematical-Frontier/image-20221231235839754.png">
+<meta property="og:image" content="http://example.com/2023/01/10/Topology-Data-Analysis-Coursework-of-Mathematical-Frontier/image-20221231235855673.png">
+<meta property="og:image" content="http://example.com/2023/01/10/Topology-Data-Analysis-Coursework-of-Mathematical-Frontier/image-20221231235915054.png">
 <meta property="article:published_time" content="2023-01-10T04:20:03.000Z">
-<meta property="article:modified_time" content="2023-01-10T04:43:58.270Z">
+<meta property="article:modified_time" content="2023-01-10T04:47:17.259Z">
 <meta property="article:author" content="Zhiqi Li">
 <meta property="article:tag" content="TDA">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="http://example.com/2023/01/10/Topology-Data-Analysis-Coursework-of-Mathematical-Frontier/Topology-Data-Analysis-Coursework-of-Mathematical-Frontier/%5Cimage-20221231214749154.png">
+<meta name="twitter:image" content="http://example.com/2023/01/10/Topology-Data-Analysis-Coursework-of-Mathematical-Frontier/image-20221231214749154.png">
   
   
   
@@ -319,7 +319,7 @@
 <p>在后面几个部分中，我将一次对拓扑数据处理的基础知识，拓扑数据处理中的Persistent Homology以及拓扑数据处理中的Mapper进行总结。</p>
 <h2 id="2-2-拓扑数据处理的基础知识"><a href="#2-2-拓扑数据处理的基础知识" class="headerlink" title="2.2 拓扑数据处理的基础知识"></a>2.2 拓扑数据处理的基础知识</h2><h3 id="2-2-1-Simplex-与-Simplicial-Complex"><a href="#2-2-1-Simplex-与-Simplicial-Complex" class="headerlink" title="2.2.1 Simplex 与 Simplicial Complex"></a>2.2.1 Simplex 与 Simplicial Complex</h3><h4 id="2-2-1-1-Simplex"><a href="#2-2-1-1-Simplex" class="headerlink" title="2.2.1.1 Simplex"></a>2.2.1.1 Simplex</h4><p>在$R^n$中，一个k维的Simplex由$R^n$上k+1个线性无关点组成，设点$v_0,…,v_k\in R^n$线性无关，则由$v_0,…,v_k$构成的Simplex定义为下面的拓扑空间：<br>$$<br>\begin{align}<br>{\sum_{i=0}^k t_i v_i |t_0+t_1+…+t_k=1,t_i\ge0}<br>    \end{align}<br>$$<br>这个Simplex可以表示为$[v_0,…,v_k]$,而$t_i$是Simplex中的点$x=\sum_i t_i v_i\in[v_0,…,v_k]$的坐标。</p>
 <p>在这里有一个概念“点列的线性性”，点列的线性无关性定义为：<br>$$<br>\begin{aligned}<br> &amp;~~~~~~~~\text{points }v_0,…,v_k\in R^n\text{ is linearly independent }\triangleq\<br> &amp;~~~~~~~~\text{vectors } v_0v_1,…,v_0v_k\in R^n\text{ are linearly independent }<br>    \end{aligned}<br>$$<br>在下图中，分别表示了维数分别为0,1,2,3的Simplex</p>
-<p><img src="./Topology-Data-Analysis-Coursework-of-Mathematical-Frontier/%5Cimage-20221231214749154.png" srcset="/img/loading.gif" lazyload alt="image-20221231214749154"></p>
+<p><img src="image-20221231214749154.png" srcset="/img/loading.gif" lazyload alt="image-20221231214749154"></p>
 <p>对于Simplex可以定义从属关系，需要注意的是，Simplex的从属关系不单是其对应的拓扑空间的从属关系，而是其构成定点的从属关系，即：<br>$$<br>\sigma=[x_1,…,x_n] \subset \tau=[y_1,…,y_m]\Leftrightarrow {x_1,…,x_n} \subset {y_1,…,y_m}<br>$$</p>
 <p>在上面的定义中$\sigma$被称为$\tau$的面。</p>
 <h4 id="2-2-1-2-Simplicial-Complex"><a href="#2-2-1-2-Simplicial-Complex" class="headerlink" title="2.2.1.2 Simplicial Complex"></a>2.2.1.2 Simplicial Complex</h4><p>Simplicial Complex是若干个单形的集合，并且这些单形需要满足一定的性质，Simplicial Complex严格的定义为：设X是一个有限集合，则定义在X上的Simplicial Complex是有X的子集构成的若干Simplex，这些Simplex满足要求</p>
@@ -353,7 +353,7 @@
 <li><p>$\partial_n$的计算：边界矩阵</p>
 <p> 在实际的计算中，尤其是在计算机的计算中，通常将 $\partial_n$表示成矩阵的形式：考虑将Simplicial Complex的n-Chain以及(n-1)-chain的Free Module之间的边界映射(即线性映射)表示为一个矩阵D，D的每一列表示n-Chain中的每一个n维单形，D的每一行表示(n-1)-Chain中的每一个n-1维单形。$D[i,j]$等于1 ，如果第i个n-1维单形是第j个n维单形列的面，否则$D[i,j]$等于0。这里的矩阵D被称为边界矩阵。</p>
 <p> 在计算的过程中，经常用到的两个量为$Im \partial_n$ 以及$Ker \partial_n$，为了计算这个量，通常需要将边界矩阵华为Smith标准型，Smith标准型如下所示，实际上即为非方阵的对角矩阵：</p>
-<p> <img src="./Topology-Data-Analysis-Coursework-of-Mathematical-Frontier/image-20221231223713966.png" srcset="/img/loading.gif" lazyload alt="image-20221231223713966"></p>
+<p> <img src="image-20221231223713966.png" srcset="/img/loading.gif" lazyload alt="image-20221231223713966"></p>
 <p> 设边界矩阵的Smith标准型中，设有p行，即$# K_{n-1}=p$;有q列，即$# K_{n}=q$;非零元素共有k列(行)，则$Im \partial_n = k$，而 $Ker \partial_n = q-k$</p>
 </li>
 <li><p>化矩阵为Smith标准型的算法</p>
@@ -432,20 +432,20 @@
 <p>横轴表示开始时间，纵轴表示结束时间。</p>
 </li>
 </ol>
-<p><img src="./Topology-Data-Analysis-Coursework-of-Mathematical-Frontier/image-20221231235232073.png" srcset="/img/loading.gif" lazyload alt="image-20221231235232073"></p>
+<p><img src="image-20221231235232073.png" srcset="/img/loading.gif" lazyload alt="image-20221231235232073"></p>
 <p>black bars represent the 0-dimensional cycles or vertices, a red bar represents a one-dimensional cycle(loop), and the blue bars represent cycles in H2(trapped voids) We like the feature that last for a long time.</p>
 <h3 id="2-3-5-实例"><a href="#2-3-5-实例" class="headerlink" title="2.3.5 实例"></a>2.3.5 实例</h3><p>在这一个例子中，我们将观察VR complex构造的过程以及从persistent diagram和persistent barcode中读取出的拓扑特征。</p>
 <ol>
 <li><p>离散图形如下所示</p>
-<p><img src="./Topology-Data-Analysis-Coursework-of-Mathematical-Frontier/image-20221231235819433.png" srcset="/img/loading.gif" lazyload alt="image-20221231235819433"></p>
+<p><img src="image-20221231235819433.png" srcset="/img/loading.gif" lazyload alt="image-20221231235819433"></p>
 </li>
 <li><p>VR Complex构造如下所示</p>
-<p><img src="./Topology-Data-Analysis-Coursework-of-Mathematical-Frontier/image-20221231235824148.png" srcset="/img/loading.gif" lazyload alt="image-20221231235824148"></p>
-<p><img src="./Topology-Data-Analysis-Coursework-of-Mathematical-Frontier/image-20221231235839754.png" srcset="/img/loading.gif" lazyload alt="image-20221231235839754"></p>
-<p><img src="./Topology-Data-Analysis-Coursework-of-Mathematical-Frontier/image-20221231235855673.png" srcset="/img/loading.gif" lazyload alt="image-20221231235855673"></p>
+<p><img src="image-20221231235824148.png" srcset="/img/loading.gif" lazyload alt="image-20221231235824148"></p>
+<p><img src="image-20221231235839754.png" srcset="/img/loading.gif" lazyload alt="image-20221231235839754"></p>
+<p><img src="image-20221231235855673.png" srcset="/img/loading.gif" lazyload alt="image-20221231235855673"></p>
 </li>
 <li><p>可视化</p>
-<p><img src="./Topology-Data-Analysis-Coursework-of-Mathematical-Frontier/image-20221231235915054.png" srcset="/img/loading.gif" lazyload alt="image-20221231235915054"></p>
+<p><img src="image-20221231235915054.png" srcset="/img/loading.gif" lazyload alt="image-20221231235915054"></p>
 </li>
 </ol>
 <h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><p>[1] Illustrations of Data Analysis Using the Mapper Algorithm and Persistent Homology</p>
